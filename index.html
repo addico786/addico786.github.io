@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
     <title>Adnan Khan | DevOps Engineer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -65,7 +68,10 @@
             position: relative;
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-weight: 600;
             line-height: 1.2;
         }
@@ -252,65 +258,104 @@
         #hero {
             height: 100vh;
             display: flex;
+            justify-content: center;
+            /* horizontal */
             align-items: center;
+            /* vertical */
+            text-align: center;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, var(--bg), var(--bg-light));
+            color: var(--text);
         }
+
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Content */
 
         .hero-content {
             position: relative;
             z-index: 2;
             max-width: 800px;
+            margin: 0 auto;
+            /* makes sure it's centered inside hero */
         }
 
+
         .hero-title {
-            margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease forwards 0.3s;
+            font-size: clamp(2rem, 6vw, 4rem);
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            background-clip: text;
+            /* standard */
+            -webkit-background-clip: text;
+            /* safari / chrome */
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            /* fallback */
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 30px;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 20px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards 0.6s;
         }
 
         .hero-description {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            line-height: 1.6;
+            color: var(--text-light);
             margin-bottom: 40px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards 0.9s;
         }
 
+        /* Buttons */
         .hero-btns {
             display: flex;
             gap: 20px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards 1.2s;
+            justify-content: center;
+            /* buttons stay centered */
+
         }
 
-        .hero-btns .btn-outline {
-            color: var(--text);
-        }
-
-        .hero-btns .btn-outline:hover {
-            color: white;
-        }
-
-        .particles-js {
+        /* Particle Background */
+        #particles-js {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
         /* About Section */
         #about {
@@ -739,6 +784,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -746,9 +792,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -756,19 +805,24 @@
 
         /* Responsive */
         @media (max-width: 992px) {
-            .about-container, .contact-container {
+
+            .about-container,
+            .contact-container {
                 grid-template-columns: 1fr;
             }
 
-            .about-img, .contact-info {
+            .about-img,
+            .contact-info {
                 order: -1;
             }
 
-            .about-content, .contact-form {
+            .about-content,
+            .contact-form {
                 text-align: center;
             }
 
-            .about-stack, .social-links {
+            .about-stack,
+            .social-links {
                 justify-content: center;
             }
 
@@ -855,6 +909,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header id="header">
@@ -885,19 +940,18 @@
 
     <!-- Hero Section -->
     <section id="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Adnan Khan</h1>
-                <h2 class="hero-subtitle">DevOps Engineer</h2>
-                <p class="hero-description">"Automating the future, one pipeline at a time"</p>
-                <div class="hero-btns">
-                    <a href="#projects" class="btn">View My Work</a>
-                    <a href="#contact" class="btn btn-outline">Contact Me</a>
-                </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Adnan Khan</h1>
+            <h2 class="hero-subtitle">DevOps Engineer</h2>
+            <p class="hero-description">"Automating the future, one pipeline at a time"</p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn">View My Work</a>
+                <a href="#contact" class="btn btn-outline">Contact Me</a>
             </div>
         </div>
         <div id="particles-js"></div>
     </section>
+
 
     <!-- About Section -->
     <section id="about">
@@ -908,8 +962,11 @@
                     <img src="adnan.png" alt="Adnan Khan">
                 </div>
                 <div class="about-content">
-                    <p>I'm a passionate DevOps fresher currently pursuing my college education while building expertise in cloud infrastructure and automation.</p>
-                    <p>Through hands-on projects, I've gained practical experience with Terraform, Jenkins, Ansible, Docker, and other DevOps tools. I'm building this portfolio to showcase my skills to recruiters and potential collaborators.</p>
+                    <p>I'm a passionate DevOps fresher currently pursuing my college education while building expertise
+                        in cloud infrastructure and automation.</p>
+                    <p>Through hands-on projects, I've gained practical experience with Terraform, Jenkins, Ansible,
+                        Docker, and other DevOps tools. I'm building this portfolio to showcase my skills to recruiters
+                        and potential collaborators.</p>
                     <div class="about-stack">
                         <span class="stack-item"><i class="fab fa-aws"></i> AWS</span>
                         <span class="stack-item"><i class="fab fa-docker"></i> Docker</span>
@@ -1012,7 +1069,8 @@
                 <!-- Project 1 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Website Automated CI/CD">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                            alt="Website Automated CI/CD">
                     </div>
                     <div class="project-content">
                         <h3>Website Automated CI/CD</h3>
@@ -1024,7 +1082,8 @@
                             <span class="project-tag">Jenkins</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/addico786/website-automated-cicd.git" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/addico786/website-automated-cicd.git" target="_blank"><i
+                                    class="fab fa-github"></i> View Code</a>
                         </div>
                     </div>
                 </div>
@@ -1043,7 +1102,8 @@
                             <span class="project-tag">EC2</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/addico786/aws-ec2-custom_vpc-terraform.git" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/addico786/aws-ec2-custom_vpc-terraform.git" target="_blank"><i
+                                    class="fab fa-github"></i> View Code</a>
                         </div>
                     </div>
                 </div>
@@ -1062,7 +1122,8 @@
                             <span class="project-tag">DevOps</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/addico786/multi-environment-module-TF.git" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/addico786/multi-environment-module-TF.git" target="_blank"><i
+                                    class="fab fa-github"></i> View Code</a>
                         </div>
                     </div>
                 </div>
@@ -1070,7 +1131,8 @@
                 <!-- Project 4 -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="EC2 S3 Terraform">
+                        <img src="https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                            alt="EC2 S3 Terraform">
                     </div>
                     <div class="project-content">
                         <h3>EC2 with S3 using Terraform</h3>
@@ -1082,7 +1144,8 @@
                             <span class="project-tag">S3</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/addico786/ec2-s3-made-with-TF.git" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/addico786/ec2-s3-made-with-TF.git" target="_blank"><i
+                                    class="fab fa-github"></i> View Code</a>
                         </div>
                     </div>
                 </div>
@@ -1093,7 +1156,8 @@
                     </div>
                     <div class="project-content">
                         <h3>2-Tier application deployed</h3>
-                        <p>Provisioned infrastructure using terraform,And deployed the application in three different servers using Ansible</p>
+                        <p>Provisioned infrastructure using terraform,And deployed the application in three different
+                            servers using Ansible</p>
                         <div class="project-tags">
                             <span class="project-tag">Terraform</span>
                             <span class="project-tag">AWS</span>
@@ -1102,11 +1166,12 @@
                             <span class="project-tag">Ansible</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/addico786/2_tier_app_deployed_remotly.git" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/addico786/2_tier_app_deployed_remotly.git" target="_blank"><i
+                                    class="fab fa-github"></i> View Code</a>
                         </div>
                     </div>
                 </div>
-                
+
 
                 <!-- 
                     ADD MORE PROJECTS HERE - COPY THE ABOVE PROJECT-CARD DIV
@@ -1133,7 +1198,8 @@
                     <span class="cert-provider">Terraform</span>
                     <h3>Build Infrastructure with Terraform on Google Cloud </h3>
                     <p>Validated foundational Terraform skills</p>
-                    <a href="https://www.credly.com/badges/4ffa5afa-fd63-485d-813d-4cd931f075d3/" target="_blank" class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
+                    <a href="https://www.credly.com/badges/4ffa5afa-fd63-485d-813d-4cd931f075d3/" target="_blank"
+                        class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
                 </div>
 
                 <!-- Certification 2 -->
@@ -1144,7 +1210,8 @@
                     <span class="cert-provider">Docker</span>
                     <h3>Deploy Kubernetes Applications on Google Cloud</h3>
                     <p>Demonstrated ability to use Docker and Kubernetes.</p>
-                    <a href="https://www.credly.com/badges/ba026063-805a-4284-8721-09085441965f/" target="_blank" class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
+                    <a href="https://www.credly.com/badges/ba026063-805a-4284-8721-09085441965f/" target="_blank"
+                        class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
                 </div>
 
                 <!-- Certification 3 -->
@@ -1155,7 +1222,8 @@
                     <span class="cert-provider">CI/CD</span>
                     <h3>Implement DevOps Workflows in Google Cloud</h3>
                     <p>Proven CI/CD and automation Fundamentals.</p>
-                    <a href="https://www.credly.com/badges/32743d87-3f19-48c4-b91c-1ce56fb497ee/" target="_blank" class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
+                    <a href="https://www.credly.com/badges/32743d87-3f19-48c4-b91c-1ce56fb497ee/" target="_blank"
+                        class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
                 </div>
 
                 <!-- Certification 4 -->
@@ -1166,7 +1234,8 @@
                     <span class="cert-provider">Web Servers</span>
                     <h3>Monitoring in Google Cloud</h3>
                     <p>Validated web servers like appache and nginx.</p>
-                    <a href="https://www.credly.com/badges/c4a2f1ad-5634-4189-befe-09b920ee7071/" target="_blank" class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
+                    <a href="https://www.credly.com/badges/c4a2f1ad-5634-4189-befe-09b920ee7071/" target="_blank"
+                        class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
                 </div>
 
                 <!-- Certification 5 -->
@@ -1177,7 +1246,8 @@
                     <span class="cert-provider">Networking</span>
                     <h3>Networking Fundamentals on Google Cloud</h3>
                     <p>Demonstrated understanding of Google Cloud networks.</p>
-                    <a href="https://www.credly.com/badges/7846de66-ba8c-4bc5-a180-f534103fc9e7/" target="_blank" class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
+                    <a href="https://www.credly.com/badges/7846de66-ba8c-4bc5-a180-f534103fc9e7/" target="_blank"
+                        class="btn" style="margin-top: 15px; padding: 8px 16px; font-size: 0.9rem;">View Badge</a>
                 </div>
 
                 <!-- 
@@ -1214,7 +1284,7 @@
                                 <p>India, New Delhi</p>
                             </div>
                         </div>
-                        <div class="contact-item">
+                        <!-- <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fa-solid fa-phone"></i>
                             </div>
@@ -1222,13 +1292,17 @@
                                 <h3>Phone</h3>
                                 <p>+91-9810878071</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="social-links">
-                        <a href="https://github.com/addico786" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/adnan-khan-afridi-46595129a/" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://wa.me/919810878071" target="_blank" class="social-link"><i class="fa-brands fa-whatsapp"></i></a>
-                         <a href="https://hashnode.com/@adnan-khan target="_blank" class="social-link"><i class="fa-brands fa-hashnode"></i></a>
+                        <a href="https://github.com/addico786" target="_blank" class="social-link"><i
+                                class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/adnan-khan-afridi-46595129a/" target="_blank"
+                            class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://wa.me/919810878071" target="_blank" class="social-link"><i
+                                class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://hashnode.com/@adnan-khan target=" _blank" class="social-link"><i
+                                class="fa-brands fa-hashnode"></i></a>
                     </div>
                 </div>
                 <div class="contact-form">
@@ -1294,11 +1368,11 @@
         // Scroll Animation
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.about-img, .about-content, .skill-card, .project-card, .cert-card, .contact-info, .contact-form');
-            
+
             elements.forEach(element => {
                 const elementPosition = element.getBoundingClientRect().top;
                 const screenPosition = window.innerHeight / 1.2;
-                
+
                 if (elementPosition < screenPosition) {
                     element.classList.add('animated');
                 }
@@ -1316,7 +1390,7 @@
         themeToggle.addEventListener('click', () => {
             html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
             themeIcon.className = html.dataset.theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            
+
             // Save preference to localStorage
             localStorage.setItem('theme', html.dataset.theme);
         });
@@ -1340,12 +1414,12 @@
 
         // Smooth Scrolling for Anchor Links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
@@ -1365,7 +1439,7 @@
         // });
 
         // Particles.js Configuration
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Only initialize particles if the element exists
             if (document.getElementById('particles-js')) {
                 // Inline particles.js config to avoid external dependency
@@ -1373,14 +1447,14 @@
                 const canvas = document.createElement('canvas');
                 canvas.id = 'particles-canvas';
                 document.getElementById('particles-js').appendChild(canvas);
-                
+
                 const ctx = canvas.getContext('2d');
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                
+
                 const particles = [];
                 const particleCount = window.innerWidth < 768 ? 30 : 60;
-                
+
                 for (let i = 0; i < particleCount; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
@@ -1390,31 +1464,31 @@
                         speedY: Math.random() * 1 - 0.5
                     });
                 }
-                
+
                 function animateParticles() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.fillStyle = 'rgba(108, 99, 255, 0.5)';
-                    
+
                     for (let i = 0; i < particles.length; i++) {
                         const p = particles[i];
-                        
+
                         ctx.beginPath();
                         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                         ctx.fill();
-                        
+
                         p.x += p.speedX;
                         p.y += p.speedY;
-                        
+
                         if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
                         if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-                        
+
                         // Draw connections
                         for (let j = i + 1; j < particles.length; j++) {
                             const p2 = particles[j];
                             const distance = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
-                            
+
                             if (distance < 100) {
-                                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - distance/100})`;
+                                ctx.strokeStyle = `rgba(108, 99, 255, ${1 - distance / 100})`;
                                 ctx.lineWidth = 0.5;
                                 ctx.beginPath();
                                 ctx.moveTo(p.x, p.y);
@@ -1423,13 +1497,13 @@
                             }
                         }
                     }
-                    
+
                     requestAnimationFrame(animateParticles);
                 }
-                
+
                 animateParticles();
-                
-                window.addEventListener('resize', function() {
+
+                window.addEventListener('resize', function () {
                     canvas.width = window.innerWidth;
                     canvas.height = window.innerHeight;
                 });
@@ -1437,4 +1511,5 @@
         });
     </script>
 </body>
+
 </html>
