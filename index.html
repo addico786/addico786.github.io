@@ -1458,12 +1458,12 @@
         });
 
         // // Form Submission (frontend only)
-        // const form = document.getElementById('form');
-        // form.addEventListener('submit', (e) => {
-        //     e.preventDefault();
-        //     alert('Thank you for your message! This is a static demo, so your message wasn\'t actually sent.');
-        //     form.reset();
-        // });
+        const form = document.getElementById('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message!');
+            form.reset();
+        });
 
         // Particles.js Configuration
         document.addEventListener('DOMContentLoaded', function () {
