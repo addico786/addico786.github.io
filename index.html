@@ -737,86 +737,6 @@
             resize: vertical;
         }
 
-        /* Form Animation States */
-        .form-submitting {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .form-submitting .btn {
-            position: relative;
-            color: transparent;
-        }
-
-        .form-submitting .btn::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin-left: -10px;
-            margin-top: -10px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .form-success {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: slideInUp 0.5s ease forwards;
-        }
-
-        .form-error {
-            background: linear-gradient(135deg, #f44336, #d32f2f);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: slideInUp 0.5s ease forwards;
-        }
-
-        @keyframes slideInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-field-error {
-            border: 2px solid #f44336 !important;
-            box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
-        }
-
-        .error-message {
-            color: #f44336;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-control:focus.form-field-error {
-            border: 2px solid #f44336;
-            box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
-        }
-
         /* Footer */
         footer {
             background: var(--bg-lighter);
@@ -1413,31 +1333,24 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="form" action="https://send.pageclip.co/GBMtmzsdedjlwpG9ZT5jk1jRznKSjYiG/portfolio" method="post">
+                    <form id="form" action="https://formspree.io/f/mqabgqrb" method="post">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" class="form-control" required>
-                            <div class="error-message" id="name-error">Please enter a valid name</div>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" id="email" name="email" class="form-control" required>
-                            <div class="error-message" id="email-error">Please enter a valid email address</div>
                         </div>
                         <div class="form-group">
                             <label for="subject">Subject</label>
                             <input type="text" id="subject" name="subject" class="form-control" required>
-                            <div class="error-message" id="subject-error">Please enter a subject</div>
                         </div>
                         <div class="form-group">
                             <label for="message">Message</label>
                             <textarea id="message" name="message" class="form-control" required></textarea>
-                            <div class="error-message" id="message-error">Please enter your message</div>
                         </div>
-                        <button type="submit" class="btn" id="submit-btn">Send Message</button>
-                        
-                        <!-- Success/Error Messages -->
-                        <div id="form-messages"></div>
+                        <button type="submit" class="btn">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -1544,182 +1457,13 @@
             });
         });
 
-        // Enhanced Form Submission with Animation and API Integration
-        const form = document.getElementById('form');
-        const submitBtn = document.getElementById('submit-btn');
-        const formMessages = document.getElementById('form-messages');
-        
-        // Form validation
-        function validateForm() {
-            let isValid = true;
-            const fields = [
-                { id: 'name', minLength: 2, message: 'Name must be at least 2 characters long' },
-                { id: 'email', type: 'email', message: 'Please enter a valid email address' },
-                { id: 'subject', minLength: 3, message: 'Subject must be at least 3 characters long' },
-                { id: 'message', minLength: 10, message: 'Message must be at least 10 characters long' }
-            ];
-
-            // Clear previous errors
-            fields.forEach(field => {
-                const input = document.getElementById(field.id);
-                const errorElement = document.getElementById(`${field.id}-error`);
-                input.classList.remove('form-field-error');
-                errorElement.style.display = 'none';
-            });
-
-            // Validate each field
-            fields.forEach(field => {
-                const input = document.getElementById(field.id);
-                const value = input.value.trim();
-                const errorElement = document.getElementById(`${field.id}-error`);
-                
-                let fieldValid = true;
-                
-                if (!value) {
-                    fieldValid = false;
-                    errorElement.textContent = `${field.id.charAt(0).toUpperCase() + field.id.slice(1)} is required`;
-                } else if (field.minLength && value.length < field.minLength) {
-                    fieldValid = false;
-                    errorElement.textContent = field.message;
-                } else if (field.type === 'email' && !isValidEmail(value)) {
-                    fieldValid = false;
-                    errorElement.textContent = field.message;
-                }
-                
-                if (!fieldValid) {
-                    input.classList.add('form-field-error');
-                    errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-
-            return isValid;
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        function showMessage(message, type) {
-            formMessages.innerHTML = `<div class="form-${type}">${message}</div>`;
-            
-            // Auto-hide success messages after 5 seconds
-            if (type === 'success') {
-                setTimeout(() => {
-                    formMessages.innerHTML = '';
-                }, 5000);
-            }
-        }
-
-        function setFormSubmitting(isSubmitting) {
-            if (isSubmitting) {
-                form.classList.add('form-submitting');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
-            } else {
-                form.classList.remove('form-submitting');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }
-        }
-
-        // Form submission handler
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Clear previous messages
-            formMessages.innerHTML = '';
-            
-            // Validate form
-            if (!validateForm()) {
-                showMessage('Please fix the errors above before submitting.', 'error');
-                return;
-            }
-
-            // Set submitting state
-            setFormSubmitting(true);
-
-            try {
-                // Create FormData object
-                const formData = new FormData(form);
-                
-                // Submit to PageClip API
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    showMessage('Thank you! Your message has been sent successfully. I\'ll get back to you soon.', 'success');
-                    form.reset();
-                } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to send message');
-                }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                showMessage('Sorry, there was an error sending your message. Please try again or contact me directly.', 'error');
-            } finally {
-                setFormSubmitting(false);
-            }
-        });
-
-        // Real-time validation on input
-        const formInputs = form.querySelectorAll('input, textarea');
-        formInputs.forEach(input => {
-            input.addEventListener('blur', () => {
-                const fieldId = input.id;
-                const value = input.value.trim();
-                const errorElement = document.getElementById(`${fieldId}-error`);
-                
-                // Clear previous error state
-                input.classList.remove('form-field-error');
-                errorElement.style.display = 'none';
-                
-                // Validate on blur
-                if (value) {
-                    let fieldValid = true;
-                    let errorMessage = '';
-                    
-                    switch (fieldId) {
-                        case 'name':
-                            if (value.length < 2) {
-                                fieldValid = false;
-                                errorMessage = 'Name must be at least 2 characters long';
-                            }
-                            break;
-                        case 'email':
-                            if (!isValidEmail(value)) {
-                                fieldValid = false;
-                                errorMessage = 'Please enter a valid email address';
-                            }
-                            break;
-                        case 'subject':
-                            if (value.length < 3) {
-                                fieldValid = false;
-                                errorMessage = 'Subject must be at least 3 characters long';
-                            }
-                            break;
-                        case 'message':
-                            if (value.length < 10) {
-                                fieldValid = false;
-                                errorMessage = 'Message must be at least 10 characters long';
-                            }
-                            break;
-                    }
-                    
-                    if (!fieldValid) {
-                        input.classList.add('form-field-error');
-                        errorElement.textContent = errorMessage;
-                        errorElement.style.display = 'block';
-                    }
-                }
-            });
-        });
+        // // Form Submission (frontend only)
+        // const form = document.getElementById('form');
+        // form.addEventListener('submit', (e) => {
+        //     e.preventDefault();
+        //     alert('Thank you for your message! This is a static demo, so your message wasn\'t actually sent.');
+        //     form.reset();
+        // });
 
         // Particles.js Configuration
         document.addEventListener('DOMContentLoaded', function () {
@@ -1793,7 +1537,6 @@
             }
         });
     </script>
-    <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
 </body>
 
 </html>
