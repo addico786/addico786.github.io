@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://addico786.github.io/sitemap.xml
+Sitemap: https://adnankhan.tech/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
