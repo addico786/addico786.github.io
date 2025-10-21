@@ -88,18 +88,18 @@
 
 ### Test Your Structured Data:
 1. Go to: https://search.google.com/test/rich-results
-2. Enter your website URL
+2. Enter your website URL: `https://adnankhan.tech/`
 3. Check for any errors
 
 ### Test Your Social Sharing:
 1. Go to: https://www.opengraph.xyz/
-2. Enter your website URL
+2. Enter your website URL: `https://adnankhan.tech/`
 3. See how it looks on social media
 
 ### Submit to Google:
 1. Go to: https://search.google.com/search-console
-2. Add your website
-3. Submit your sitemap: `https://addico786.github.io/sitemap.xml`
+2. Add your website: `https://adnankhan.tech/`
+3. Submit your sitemap: `https://adnankhan.tech/sitemap.xml`
 
 ## 📅 **Regular Maintenance Schedule**
 
