@@ -5,6 +5,23 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 const clamp = (n: number, min = 0, max = 1) => Math.min(max, Math.max(min, n))
 
 /**
+ * iOS Safari won't paint a frame from a <video> until it has actually been
+ * played once (and Low Power Mode blocks even muted autoplay until a tap).
+ * "Prime" the element with a muted play() -> pause() so the decoder wakes and
+ * renders the current frame; after that, scrubbing via currentTime works.
+ */
+function primeVideo(v: HTMLVideoElement | null) {
+  if (!v) return
+  v.muted = true // set the DOM property (React's `muted` attr doesn't always stick)
+  const p = v.play()
+  if (p && typeof p.then === 'function') {
+    p.then(() => v.pause()).catch(() => {
+      /* blocked until a user gesture — handled by the touch fallback */
+    })
+  }
+}
+
+/**
  * Fixed, full-screen backdrop behind all content.
  * For each section it cross-fades to that section's video and scrubs the
  * video's currentTime in sync with how far the section has scrolled.
@@ -14,6 +31,19 @@ export function VideoBackdrop() {
   const reduced = usePrefersReducedMotion()
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
   const layerRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  // Fallback for iOS Low Power Mode: prime every video on the first user gesture.
+  useEffect(() => {
+    if (reduced) return
+    const primeAll = () => Object.values(videoRefs.current).forEach(primeVideo)
+    const opts = { once: true, passive: true } as const
+    window.addEventListener('touchstart', primeAll, opts)
+    window.addEventListener('pointerdown', primeAll, opts)
+    return () => {
+      window.removeEventListener('touchstart', primeAll)
+      window.removeEventListener('pointerdown', primeAll)
+    }
+  }, [reduced])
 
   useEffect(() => {
     if (reduced) return
@@ -68,11 +98,16 @@ export function VideoBackdrop() {
         >
           {scene.video && !reduced ? (
             <video
-              ref={(el) => (videoRefs.current[scene.id] = el)}
+              ref={(el) => {
+                videoRefs.current[scene.id] = el
+                if (el) el.muted = true
+              }}
               src={scene.video}
               muted
               playsInline
+              webkit-playsinline="true"
               preload="auto"
+              onLoadedData={(e) => primeVideo(e.currentTarget)}
               className="h-full w-full object-cover"
             />
           ) : (
