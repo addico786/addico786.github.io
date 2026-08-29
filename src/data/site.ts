@@ -98,6 +98,7 @@ export const site = {
       linkLabel: "appflint.online",
       slot: "shot-flint",
       placeholder: "Flint screenshot",
+      alt: "Flint, a Chrome extension that strips tracking parameters from links, built by Adnan Khan",
       image: "/work/flint.png" as string | undefined,
       blurb:
         "A URL cleaner that strips tracking parameters before a link ever leaves your hands.",
@@ -110,6 +111,7 @@ export const site = {
       linkLabel: "vibescan.online",
       slot: "shot-vibescan",
       placeholder: "VibeScan screenshot",
+      alt: "VibeScan, a browser security scanner reporting page risks in plain language",
       image: "/work/vibescan.png" as string | undefined,
       blurb:
         "A security scanner for the pages you actually visit, reported in plain language.",
@@ -122,6 +124,7 @@ export const site = {
       linkLabel: "urbantechbuildings.com",
       slot: "shot-utb",
       placeholder: "Urban Tech Buildings screenshot",
+      alt: "Urban Tech Buildings, a construction company marketing site built for fast mobile loading",
       image: "/work/utb.png" as string | undefined,
       blurb:
         "A construction company site built to load fast on a phone at a site visit.",
@@ -134,6 +137,7 @@ export const site = {
       linkLabel: "Case study soon",
       slot: "shot-prd",
       placeholder: "PRD Decomposer screenshot",
+      alt: "PRD Decomposer, a React app turning requirements documents into a task graph",
       image: undefined as string | undefined,
       blurb:
         "Turns a product requirements document into a dependency-ordered task graph.",
@@ -146,6 +150,7 @@ export const site = {
       linkLabel: "Case study soon",
       slot: "shot-blog",
       placeholder: "Blog engine diagram",
+      alt: "Blog engine automation pipeline using n8n, Gemini and Cloudflare R2",
       image: undefined as string | undefined,
       blurb:
         "An automation pipeline that drafts, illustrates and publishes without a dashboard.",
@@ -158,6 +163,7 @@ export const site = {
       linkLabel: "Case study soon",
       slot: "shot-nfc",
       placeholder: "NFC card photograph",
+      alt: "Programmable NFC contact cards with a hosted profile page",
       image: undefined as string | undefined,
       blurb:
         "Programmable contact cards with a hosted profile behind a single tap.",

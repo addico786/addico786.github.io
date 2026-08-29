@@ -10,10 +10,14 @@ export default function ImageSlot({
   id,
   src: srcProp,
   placeholder,
+  alt,
 }: {
   id: string;
   src?: string;
   placeholder: string;
+  /* what the image shows, for search and screen readers — the placeholder
+     text is a design instruction and makes poor alt text */
+  alt?: string;
 }) {
   /* a project carries its own image; the hero still reads the shared map */
   const src = srcProp ?? images[id];
@@ -21,7 +25,7 @@ export default function ImageSlot({
   return (
     <div className="slot" data-image-slot={id}>
       {src ? (
-        <img src={src} alt={placeholder} loading="lazy" decoding="async" />
+        <img src={src} alt={alt ?? placeholder} loading="lazy" decoding="async" />
       ) : (
         <span>{placeholder}</span>
       )}

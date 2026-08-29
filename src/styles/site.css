@@ -1046,3 +1046,6 @@ h2.split-parent, span.split-parent { vertical-align: top; }
   max-width: 48ch;
   margin-bottom: clamp(var(--space-8), 3vw, var(--space-9));
 }
+
+/* The h1 wraps the hero stack; it must not introduce a box of its own. */
+.hero__h1 { display: contents; font: inherit; }

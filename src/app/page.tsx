@@ -95,12 +95,23 @@ export default function Home() {
         <div data-stage>
         <section id="top" data-invert data-hero>
           <div data-hero-media>
-            <ImageSlot id="hero-bg" placeholder="Hero photograph — full bleed" />
+            <ImageSlot
+              id="hero-bg"
+              placeholder="Hero photograph — full bleed"
+              alt="Adnan Khan, freelance web developer and SEO consultant based in Delhi, India"
+            />
           </div>
           <div className="hero__scrim" aria-hidden="true" />
 
           <div data-hero-fade>
-            <div data-hero-stack>
+            {/* The page had no h1 at all. The visible hero is four stylised
+                fragments; the heading states the same thing readably for
+                search and screen readers, and matches the title tag. */}
+            <h1 className="hero__h1">
+              <span className="ds-sr-only">
+                {site.name} — {site.tagline}
+              </span>
+              <span data-hero-stack aria-hidden="true">
               {site.heroLines.map((l, i) => (
                 <div
                   key={l.word}
@@ -120,7 +131,8 @@ export default function Home() {
                   </span>
                 </div>
               ))}
-            </div>
+              </span>
+            </h1>
             <div className="hero__foot u-mono">
               <span>{site.strapline}</span>
               <span data-scroll-cue><i />Scroll</span>
@@ -252,7 +264,7 @@ export default function Home() {
                 <div key={p.slot} data-work-item className="ds-fade-up" data-inview>
                   <div data-work-head>
                     <div data-work-media aria-hidden="true">
-                      <ImageSlot id={p.slot} src={p.image} placeholder={p.placeholder} />
+                      <ImageSlot id={p.slot} src={p.image} placeholder={p.placeholder} alt={p.alt} />
                     </div>
                     <button data-work-row type="button">
                       <span className="work__num">{projectNumber(i)}</span>
@@ -277,7 +289,7 @@ export default function Home() {
                   <div data-work-panel>
                     <div className="work__panelInner">
                       <div className="work__shot">
-                        <ImageSlot id={p.slot} src={p.image} placeholder={p.placeholder} />
+                        <ImageSlot id={p.slot} src={p.image} placeholder={p.placeholder} alt={p.alt} />
                       </div>
                       <div className="work__aside">
                         <p className="work__rowmeta">
