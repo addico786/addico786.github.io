@@ -136,3 +136,21 @@ outbound links are all derived from it, so nothing else needs touching.
 
 Verified by adding a 7th (marquee read "Seven", numbering ran to 07) and by
 deleting one (read "Five", numbering to 05).
+
+## Deploying
+
+Cloudflare Pages project `addico786-github-io`, serving `adnankhan.tech`.
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `next-portfolio` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+`npm run build` runs `next build` and moves the static export from `out/` to
+`dist/`, matching the output directory the Pages project already used — so no
+Pages settings needed changing. The site has no server code, so a static
+export is the whole build and no Pages adapter is required.
+
+Pushing to `next-portfolio` triggers a production deploy. Any other branch
+builds as a preview at `<branch>.addico786-github-io.pages.dev`.
