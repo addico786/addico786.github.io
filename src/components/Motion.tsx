@@ -117,9 +117,9 @@ export default function Motion() {
     offs.push(() => io.disconnect());
 
     /* ---- the opening: word leaves, rules draw, hero words rise ----
-       Timed off the source recording: the word holds ~1.1s, its characters
-       animate out fast while the panel fades under them, the column rules
-       draw downward, then the hero words come in. */
+       Timed off the source recording: the word holds, its characters animate
+       out fast, the panel drops once they are gone, the column rules draw
+       downward, then the hero words come in. */
     const opener = root.querySelector<HTMLElement>("[data-opener]");
     const grid = root.querySelector<HTMLElement>("[data-grid]");
     const heroSection = root.querySelector<HTMLElement>("[data-hero]");
@@ -168,9 +168,32 @@ export default function Motion() {
       lenis?.stop();
       document.body.style.overflow = "hidden";
 
+      /* how long the word sits before it leaves, and the per-character exit */
+      const HOLD = 1300;
+      const EXIT = 0.45;
+      const EXIT_STAGGER = 0.025;
+
+      /* the ground drops, the rules draw, then the hero words come in */
+      const settle = () => {
+        opener.style.transition = "opacity 0.6s var(--ease-out-cubic)";
+        opener.style.opacity = "0";
+        document.body.style.overflow = "";
+        lenis?.start();
+        grid?.classList.add("is-drawn");
+        root.classList.add("is-ruled");
+        /* hide rather than remove — the node belongs to React */
+        timers.push(setTimeout(() => (opener.style.display = "none"), 700));
+        timers.push(
+          setTimeout(() => {
+            heroSection?.classList.add("is-intro");
+            revealHero();
+          }, 500)
+        );
+      };
+
       /* <SplitText> animates the word in; the exit is ours. Fast, per
-         character, with the panel fade overlapping it — the source has the
-         ground already darkening while the last letters are still leaving. */
+         character — and nothing may start fading until the last character has
+         left, or the page reads as vanishing mid-animation. */
       timers.push(
         setTimeout(() => {
           const chars = opener.querySelectorAll(".split-char");
@@ -178,37 +201,23 @@ export default function Motion() {
              not happened yet, so fall back to the word itself — otherwise the
              exit is skipped and the word just disappears. */
           const target = chars.length ? chars : opener.querySelector(".opener__word");
+          const stagger = chars.length ? EXIT_STAGGER : 0;
+          /* derived, not hardcoded: a longer opener word staggers longer, and
+             the settle waits for it */
+          let exitMs = EXIT * 1000;
           if (target) {
+            exitMs = (stagger * Math.max(chars.length - 1, 0) + EXIT) * 1000;
             gsap.to(target, {
               opacity: 0,
               y: -24,
               scaleX: 0.4,
-              duration: 0.45,
+              duration: EXIT,
               ease: "power2.in",
-              stagger: chars.length ? 0.025 : 0,
+              stagger,
             });
           }
-        }, 1100)
-      );
-
-      timers.push(
-        setTimeout(() => {
-          opener.style.transition = "opacity 0.6s var(--ease-out-cubic)";
-          opener.style.opacity = "0";
-          document.body.style.overflow = "";
-          lenis?.start();
-          grid?.classList.add("is-drawn");
-          root.classList.add("is-ruled");
-          /* hide rather than remove — the node belongs to React */
-          timers.push(setTimeout(() => (opener.style.display = "none"), 700));
-        }, 1350)
-      );
-
-      timers.push(
-        setTimeout(() => {
-          heroSection?.classList.add("is-intro");
-          revealHero();
-        }, 1900)
+          timers.push(setTimeout(settle, exitMs));
+        }, HOLD)
       );
     }
 
