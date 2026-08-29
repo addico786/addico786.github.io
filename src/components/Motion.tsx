@@ -222,6 +222,7 @@ export default function Motion() {
     }
 
     /* ---- one scroll loop: hero drift + parallax + marquee + menu ---- */
+    const MARQUEE_RATE = 0.01;
     const media = root.querySelector<HTMLElement>("[data-hero-media]");
     const heroFade = root.querySelector<HTMLElement>("[data-hero-fade]");
     const marquee = root.querySelector<HTMLElement>("[data-marquee]");
@@ -245,6 +246,9 @@ export default function Motion() {
     let cur = 0;
     let lastY = 0;
     let mini = false;
+    /* the marquee trails the page on its own softer spring — coupling it
+       straight to the scroll made it whip on every flick */
+    let mq = 0;
 
     /* ---- horizontal drag on the stacked (narrow) hero ---- */
     const hero = root.querySelector<HTMLElement>("[data-hero]");
@@ -307,7 +311,12 @@ export default function Motion() {
         ).toFixed(3)})`;
       }
       if (marquee) {
-        marquee.style.transform = `translate3d(${(-((cur * 0.12) % 50)).toFixed(2)}%,0,0)`;
+        /* MARQUEE_RATE is % of the strip's own width per pixel scrolled, and
+           the strip is far wider than the viewport — so small numbers here go
+           a long way. It follows raw scroll through its own lerp rather than
+           `cur`, which gives it the lag that reads as weight. */
+        mq += (target * MARQUEE_RATE - mq) * 0.05;
+        marquee.style.transform = `translate3d(${(-(mq % 50)).toFixed(2)}%,0,0)`;
       }
 
       if (shapesBand && shapes.length) {
