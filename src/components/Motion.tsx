@@ -222,7 +222,15 @@ export default function Motion() {
     }
 
     /* ---- one scroll loop: hero drift + parallax + marquee + menu ---- */
-    const MARQUEE_RATE = 0.035;
+    /* The marquee runs on two channels, because "how far it travels" and "how
+       obviously the scroll drives it" are different problems and one rate
+       cannot serve both — turn it up and it races, down and it reads as
+       drifting on its own clock.
+         drift : scroll POSITION, slow, owns the net travel
+         kick  : scroll VELOCITY, bounded, springs back to zero — owns the
+                 scroll feel and contributes no distance at all */
+    const MARQUEE_RATE = 0.015;
+    const MARQUEE_KICK = 70;
     const media = root.querySelector<HTMLElement>("[data-hero-media]");
     const heroFade = root.querySelector<HTMLElement>("[data-hero-fade]");
     const marquee = root.querySelector<HTMLElement>("[data-marquee]");
@@ -246,9 +254,10 @@ export default function Motion() {
     let cur = 0;
     let lastY = 0;
     let mini = false;
-    /* the marquee trails the page on its own spring — soft enough to cushion
-       a flick, tight enough that it stops when the scroll does */
+    /* marquee state: mq is the slow positional drift, kick the bounded
+       velocity lunge that carries the scroll feel */
     let mq = 0;
+    let kick = 0;
 
     /* ---- horizontal drag on the stacked (narrow) hero ---- */
     const hero = root.querySelector<HTMLElement>("[data-hero]");
@@ -316,7 +325,12 @@ export default function Motion() {
            a long way. It follows raw scroll through its own lerp rather than
            `cur`, which gives it the lag that reads as weight. */
         mq += (target * MARQUEE_RATE - mq) * 0.14;
-        marquee.style.transform = `translate3d(${(-(mq % 50)).toFixed(2)}%,0,0)`;
+        /* the lunge tracks scroll speed, is clamped so a fast flick cannot
+           throw it, and eases back to rest the moment the scroll stops */
+        const want = Math.max(-MARQUEE_KICK, Math.min(MARQUEE_KICK, dy * 2.2));
+        kick += (want - kick) * 0.12;
+        marquee.style.transform =
+          `translate3d(calc(${(-(mq % 50)).toFixed(2)}% - ${kick.toFixed(1)}px),0,0)`;
       }
 
       if (shapesBand && shapes.length) {
