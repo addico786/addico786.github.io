@@ -1,0 +1,245 @@
+/* ---------------------------------------------------------------------------
+ * Webfonts. All faces are self-hosted; nothing loads from a CDN.
+ *
+ * BDO Grotesk is source-verified: nbnzia.com references `Bdogrotesk`, and the
+ * uploaded binaries are Webflow's own hashed asset names from that site. It is
+ * now the display + body face, replacing the Archivo substitution.
+ *
+ * Archivo (SIL OFL) stays in the fallback chain and remains the stand-in for
+ * maelanlemeur.com's PP Neue Montreal, which is commercial and still absent.
+ *
+ * ------------------------------------------------------------------------- */
+
+/* -- BDO Grotesk — display + body (nbnzia.com) --------------------------- */
+@font-face{font-family:'BDO Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/6a71cdde200be9977dfc7a15_BDOGrotesk-Regular.woff2) format('woff2')}
+@font-face{font-family:'BDO Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/6a71cdde808e64bec43afab3_BDOGrotesk-Medium.woff2) format('woff2')}
+
+/* -- Archivo — fallback + PP Neue Montreal stand-in --------------------- */
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-stretch:100%;font-display:swap;src:url(/fonts/archivo-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-stretch:100%;font-display:swap;src:url(/fonts/archivo-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-stretch:100%;font-display:swap;src:url(/fonts/archivo-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700;font-stretch:100%;font-display:swap;src:url(/fonts/archivo-700.woff2) format('woff2')}
+
+/* ---------------------------------------------------------------------------
+ * Colour — three layers, in order:
+ *   1. ramp      raw measured values, no meaning attached
+ *   2. semantic  what a colour is FOR   <- components may only use these
+ *   3. themes    light / dark, by redefining layer 2 only
+ *
+ * Layer separation is nbnzia.com's DTCG structure; the values are
+ * maelanlemeur.com's, the only source measured at confidence 1.0.
+ * ------------------------------------------------------------------------- */
+:root{
+  /* -- 1. Ramp ------------------------------------------------------------
+     Warm neutrals: chroma 0.007-0.011 at hue 53-72deg. The warmth is
+     measured, not styling - a chroma-0 ramp reads as a different site. */
+  --n-50:  oklch(0.9702 0.0067 53.4);
+  --n-100: oklch(0.9398 0.0076 61.4);
+  --n-200: oklch(0.9001 0.0087 67.7);
+  --n-300: oklch(0.8300 0.0097 62.6);
+  --n-400: oklch(0.7392 0.0108 58.2);
+  --n-500: oklch(0.6304 0.0103 62.5);
+  --n-600: oklch(0.5203 0.0100 67.6);
+  --n-700: oklch(0.4201 0.0094 61.3);
+  --n-800: oklch(0.3202 0.0078 59.4);
+  --n-900: oklch(0.2201 0.0074 67.4);
+  --n-950: oklch(0.1305 0.0071 71.9);
+
+  /* Signature: 1585 uses, 0.98 weight-share, confidence 1.0 (#eee9cc) */
+  --cream: oklch(0.9304 0.0386 99);
+  /* Rare accent: 5 uses, confidence 0.003 (#674825) - sparing, by design */
+  --brown: oklch(0.4279 0.0656 67.8);
+  /* Dark-theme lift of --brown; same hue, raised lightness for contrast */
+  --brown-lift: oklch(0.7200 0.0900 67.8);
+  --warm-black: oklch(0.1600 0.0080 70.0);
+
+  --danger:      oklch(0.5770 0.2150 27.3);
+  --danger-text: oklch(0.9800 0.0050 90.0);
+
+  /* -- 2. Semantic - light ---------------------------------------------- */
+  --surface-canvas: var(--cream);
+  --surface-raised: oklch(0.9620 0.0250 99);
+  --surface-sunk:   oklch(0.8980 0.0360 99);
+
+  --text-primary: var(--n-900);
+  --text-muted:   var(--n-700);
+  --text-inverse: var(--cream);
+
+  --border-subtle: oklch(0.8600 0.0330 99);
+  --border-strong: var(--n-400);
+
+  --interactive-primary:      var(--brown);
+  --interactive-primary-text: var(--cream);
+  --focus-ring:               var(--brown);
+
+  color-scheme: light dark;
+}
+
+/* -- 3. Themes ----------------------------------------------------------
+   Only the semantic layer is redefined. Same mechanism Webflow uses for
+   inverted sections: rebind the variables, leave every component alone.
+
+   Dark follows the OS by default; [data-theme] on <html> forces either way. */
+@media (prefers-color-scheme: dark){
+  :root{
+  --surface-canvas: var(--warm-black);
+  --surface-raised: oklch(0.2100 0.0090 70);
+  --surface-sunk:   oklch(0.1150 0.0070 72);
+  --text-primary: var(--cream);
+  --text-muted:   var(--n-400);
+  --text-inverse: var(--warm-black);
+  --border-subtle: oklch(0.2900 0.0085 65);
+  --border-strong: var(--n-700);
+  --interactive-primary:      var(--brown-lift);
+  --interactive-primary-text: var(--warm-black);
+  --focus-ring:               var(--brown-lift);
+  }
+}
+:root[data-theme="light"]{
+  --surface-canvas: var(--cream);
+  --surface-raised: oklch(0.9620 0.0250 99);
+  --surface-sunk:   oklch(0.8980 0.0360 99);
+  --text-primary: var(--n-900);
+  --text-muted:   var(--n-700);
+  --text-inverse: var(--cream);
+  --border-subtle: oklch(0.8600 0.0330 99);
+  --border-strong: var(--n-400);
+  --interactive-primary:      var(--brown);
+  --interactive-primary-text: var(--cream);
+  --focus-ring:               var(--brown);
+}
+:root[data-theme="dark"]{
+  --surface-canvas: var(--warm-black);
+  --surface-raised: oklch(0.2100 0.0090 70);
+  --surface-sunk:   oklch(0.1150 0.0070 72);
+  --text-primary: var(--cream);
+  --text-muted:   var(--n-400);
+  --text-inverse: var(--warm-black);
+  --border-subtle: oklch(0.2900 0.0085 65);
+  --border-strong: var(--n-700);
+  --interactive-primary:      var(--brown-lift);
+  --interactive-primary-text: var(--warm-black);
+  --focus-ring:               var(--brown-lift);
+}
+
+/* Scoped inversion: any subtree flips theme without a second stylesheet. */
+[data-invert]{
+  --surface-canvas: var(--warm-black);
+  --surface-raised: oklch(0.2100 0.0090 70);
+  --text-primary: var(--cream);
+  --text-muted:   var(--n-400);
+  --border-subtle: oklch(0.2900 0.0085 65);
+  --interactive-primary:      var(--brown-lift);
+  --interactive-primary-text: var(--warm-black);
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * Type. Scale is nbnzia.com's modular set. maelanlemeur.com's
+ * 61.12/122.24/194.8px were 25vh hero lines frozen at one capture viewport -
+ * they reproduce exactly one screen size, so they are rebuilt as clamp().
+ * ------------------------------------------------------------------------- */
+:root{
+  /* BDO Grotesk is nbnzia.com's real face, now self-hosted. Archivo (SIL OFL)
+     backs it up and still stands in for maelanlemeur.com's PP Neue Montreal. */
+  --font-display: "BDO Grotesk", "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body:    "BDO Grotesk", "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", Menlo, monospace;
+
+
+  --text-2xs:  0.625rem;  /* 10 */
+  --text-xs:   0.75rem;   /* 12 */
+  --text-sm:   0.875rem;  /* 14 */
+  --text-base: 1rem;      /* 16 */
+  --text-lg:   1.25rem;   /* 20 */
+  --text-xl:   2rem;      /* 32 */
+  --text-2xl:  2.25rem;   /* 36 */
+  --text-3xl:  4rem;      /* 64 */
+  --text-4xl:  6rem;      /* 96 */
+  --text-5xl:  8rem;      /* 128 */
+  --text-6xl:  12.5rem;   /* 200 */
+  /* Hero lines: the source's real intent was 25vh, clamped for sanity. */
+  --text-hero: clamp(3rem, 25vh, 12.5rem);
+
+  /* Weights actually used: body 400, UI labels 500, display 500.
+     BDO Grotesk ships Regular + Medium only, so display sits at 500 rather
+     than the 600 the Archivo substitution used - no synthetic bolding. */
+  --weight-body:    400;
+  --weight-label:   500;
+  --weight-display: 500;
+
+  /* Tracking. Display type is tightened; mono eyebrows are opened right up. */
+  --track-display: -0.03em;
+  --track-tight:   -0.02em;
+  --track-normal:  0em;
+  --track-eyebrow: 0.13em;
+
+  --leading-display: 1.02;
+  --leading-tight:   1.1;
+  --leading-snug:    1.45;
+  --leading-body:    1.6;
+}
+
+/* ---------------------------------------------------------------------------
+ * Spacing, radius, shadow.
+ * Spacing is maelanlemeur.com's measured set (10/12/18/20/40/50/60/210px) -
+ * a genuine base-2 scale, kept at its real values rather than snapped to 4px.
+ * Radius and shadow are nbnzia.com's, rounded onto a real scale.
+ * ------------------------------------------------------------------------- */
+:root{
+  --space-1:  0.125rem;   /* 2 */
+  --space-2:  0.25rem;    /* 4 */
+  --space-3:  0.5rem;     /* 8 */
+  --space-4:  0.625rem;   /* 10 */
+  --space-5:  0.75rem;    /* 12 */
+  --space-6:  1rem;       /* 16 */
+  --space-7:  1.125rem;   /* 18 */
+  --space-8:  1.25rem;    /* 20 */
+  --space-9:  2.5rem;     /* 40 */
+  --space-10: 3.125rem;   /* 50 */
+  --space-11: 3.75rem;    /* 60 */
+  --space-12: 13.125rem;  /* 210 */
+
+  --radius-xs: 0.125rem;   /* 2  - the default for UI chrome */
+  --radius-sm: 0.25rem;    /* 4 */
+  --radius-md: 0.375rem;   /* 6 */
+  --radius-lg: 0.5rem;     /* 8 */
+  --radius-xl: 0.9375rem;  /* 15 - media and large panels */
+
+  /* One shadow in the whole system. Offset, not centred; very soft. */
+  --shadow-xl: rgba(0, 0, 0, 0.14) 3px 3px 30px 0px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Motion tokens. Easings and durations measured from maelanlemeur.com; the
+ * expo curves are nbnzia.com's GSAP timeline expressed as their cubic-bezier
+ * equivalents, so CSS and GSAP share one vocabulary.
+ * ------------------------------------------------------------------------- */
+:root{
+  --ease-out-cubic:    cubic-bezier(0.215, 0.61, 0.355, 1); /* @kind other */
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1); /* @kind other */
+  --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1); /* @kind other */
+  --ease-in-out-quad:  cubic-bezier(0.455, 0.03, 0.515, 0.955); /* @kind other */
+  --ease-expo-out:     cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-expo-in-out:  cubic-bezier(0.87, 0, 0.13, 1); /* @kind other */
+
+  --dur-instant: 0.05s; /* @kind other */
+  --dur-fast:    0.3s; /* @kind other */
+  --dur-base:    0.6s; /* @kind other */
+  --dur-slow:    1s; /* @kind other */
+  --dur-draw:    1.2s; /* @kind other */
+  --dur-epic:    2s; /* @kind other */
+
+  --stagger-char: 0.02s; /* @kind other */
+  --stagger-word: 0.06s; /* @kind other */
+  --stagger-line: 0.1s; /* @kind other */
+
+  --rise-char: 60%; /* @kind other */
+  --rise-line: 130%; /* @kind other */
+  --rise-fade: 1.875rem; /* @kind other */
+
+  /* Per-element resolved values - each animation class overrides these. */
+  --stagger: var(--stagger-char); /* @kind other */
+  --delay-base: 0s; /* @kind other */
+}

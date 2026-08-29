@@ -1,0 +1,66 @@
+/* ---------------------------------------------------------------------------
+ * The stagger engine + the animation classes the motion components attach to.
+ *
+ * The source site shipped ~500 generated lines of
+ *   .thing .char-wrap:nth-child(1){transition-delay:.02s}   ... up to 25
+ * which caps out at 25 characters and cannot handle dynamic text. split.js
+ * writes style="--i:<n>" on every generated span instead, so one declaration
+ * covers any string of any length.
+ *
+ * IMPORTANT: every animation class below sets transition-property/-duration/
+ * -timing-function as LONGHANDS. The `transition:` shorthand resets
+ * transition-delay to 0s, which silently wipes the stagger with no error.
+ * ------------------------------------------------------------------------- */
+.ds-split > *,.ds-split .ds-char,.ds-split .ds-word,.ds-split .ds-line{transition-delay:calc(var(--delay-base) + var(--i, 0) * var(--stagger))}
+
+/* --- Shared primitives -------------------------------------------------- */
+/* A mask: children translate inside it and are clipped at its edges. */
+.ds-mask{overflow:hidden;display:block}
+.ds-char,.ds-word{display:inline-block}
+.ds-line{display:block}
+/* split.js emits a real space text node between words - no ::before needed.
+   Adding one here double-spaces every gap. */
+
+/* --- 3. Hover swap (two stacked copies, chars cross-fade opposite ways) -- */
+.ds-swap{position:relative;display:inline-block;--stagger:var(--stagger-char);cursor:pointer;color:inherit;text-decoration:none}
+.ds-swap-layer{display:block;white-space:nowrap}
+/* Sits exactly over the main layer; both share the container's box. */
+.ds-swap-layer.-hover{position:absolute;inset:0}
+.ds-swap .ds-char{transition-property:opacity,transform;transition-duration:var(--dur-fast);transition-timing-function:var(--ease-out-cubic)}
+.ds-swap-layer.-hover .ds-char{opacity:0;transform:translate3d(0,var(--rise-char),0)}
+.ds-swap:hover .ds-swap-layer.-main .ds-char,.ds-swap:focus-visible .ds-swap-layer.-main .ds-char{opacity:0;transform:translate3d(0,calc(-1 * var(--rise-char)),0)}
+.ds-swap:hover .ds-swap-layer.-hover .ds-char,.ds-swap:focus-visible .ds-swap-layer.-hover .ds-char{opacity:1;transform:translate3d(0,0,0)}
+.ds-swap:focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+
+/* --- 4. Rotator (entering line rises in, leaving continues upward) ------ */
+.ds-rotator{position:relative;display:block;--stagger:var(--stagger-line)}
+.ds-rotator-item{position:absolute;top:0;left:0;width:100%;pointer-events:none}
+/* First child stays in flow so the container keeps a natural height. */
+.ds-rotator-item:first-child{position:relative}
+.ds-rotator-item .ds-line{overflow:hidden}
+.ds-rotator-item .ds-line-inner{display:block;transform:translate3d(0,var(--rise-line),0);transition-property:transform;transition-duration:0s;transition-timing-function:var(--ease-in-out-cubic);will-change:transform}
+.ds-rotator-item.is-active{pointer-events:auto}
+.ds-rotator-item.is-active .ds-line-inner{transition-duration:var(--dur-slow);transform:translate3d(0,0,0)}
+.ds-rotator-item.is-leaving .ds-line-inner{transition-duration:var(--dur-slow);transform:translate3d(0,calc(-1 * var(--rise-line)),0)}
+
+/* --- 5. Fade up (generic scroll reveal) --------------------------------- */
+.ds-fade-up{opacity:0;transform:translate3d(0,var(--rise-fade),0);transition-property:opacity,transform;transition-duration:var(--dur-base);transition-timing-function:var(--ease-out-cubic);transition-delay:calc(var(--delay-base) + var(--i, 0) * var(--stagger-line))}
+.ds-fade-up.is-inview{opacity:1;transform:translate3d(0,0,0)}
+
+/* Screen-reader-only text, for split containers that keep the real string. */
+.ds-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------------------------------------------------------------------------
+ * Reduced motion. The source stylesheet contains zero prefers-reduced-motion
+ * rules. Because every animation above is transform + opacity only, this one
+ * block lands all of them in their final state, nothing hidden or mid-move.
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce){
+  .ds-split > *,.ds-split .ds-char,.ds-split .ds-word,.ds-split .ds-line,
+    .ds-fade-up,
+  .ds-fade-up{opacity:1;transform:translate3d(0,0,0)}
+  .ds-rotator-item .ds-line-inner{transform:translate3d(0,var(--rise-line),0)}
+  .ds-rotator-item.is-active .ds-line-inner{transform:translate3d(0,0,0)}
+  /* Hover swap keeps working: it is intentional, not ambient. */
+  .ds-swap .ds-char{transition-duration:0.01ms !important}
+}
