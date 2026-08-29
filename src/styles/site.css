@@ -789,6 +789,18 @@ img { display: block; max-width: 100%; }
    from disturbing the type it is splitting.
    ------------------------------------------------------------------------- */
 .split-parent { max-width: 100%; }
+/* SplitText renders its text server-side at full opacity and only applies the
+   from-state after mount. Until GSAP takes over, the finished text is on
+   screen — so on a slow device you see the final words, then they snap away
+   and animate in. Hold them until the split exists (which only happens once
+   GSAP is driving), gated on .js so a bundle that never runs still shows
+   everything, and released by the failsafe. */
+.js .split-parent { visibility: hidden; }
+.js .split-parent:has(.split-char),
+.js .split-parent:has(.split-word),
+.js .split-parent:has(.split-line),
+.intro-failed .split-parent { visibility: visible; }
+
 /* SplitText stamps will-change on every character, and there are 600+ of
    them. Each becomes a promoted compositor layer — invisible on desktop,
    severe GPU memory pressure on a phone. Transform and opacity animations are
