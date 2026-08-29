@@ -1067,3 +1067,8 @@ h2.split-parent, span.split-parent { vertical-align: top; }
 .intro-failed [data-grid-col] { transform: scaleY(1); opacity: 1; }
 .intro-failed [data-hero-band]::after,
 .intro-failed [data-hero-band]:last-child::before { transform: none; opacity: 1; }
+
+/* These two read as sentences rather than scan as labels, so they take the
+   next step up again. */
+.svc__certs,
+.foot__colophon { font-size: var(--text-sm); letter-spacing: 0.08em; }

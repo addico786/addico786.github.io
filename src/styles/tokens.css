@@ -148,7 +148,8 @@
   --font-mono:    ui-monospace, "SF Mono", Menlo, monospace;
 
 
-  --text-2xs:  0.625rem;  /* 10 */
+  --text-2xs:  0.75rem;   /* 12 — was 10, which is below comfortable
+                             reading size for tracked uppercase labels */
   --text-xs:   0.75rem;   /* 12 */
   --text-sm:   0.875rem;  /* 14 */
   --text-base: 1rem;      /* 16 */

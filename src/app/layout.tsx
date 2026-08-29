@@ -78,7 +78,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    /* The bootstrap below and Lenis both add classes to <html> before React
+       hydrates, so the server markup and the client disagree by design. This
+       is the documented escape hatch for exactly that pattern. */
+    <html lang="en" suppressHydrationWarning>
       <body>
         {/* Progressive enhancement + failsafe. The opener panel and the hero
             words are hidden by CSS and revealed by Motion.tsx. If the bundle
