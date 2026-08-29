@@ -6,3 +6,7 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 .gstack/
+
+# python bytecode from tools/
+__pycache__/
+*.pyc
