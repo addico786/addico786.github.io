@@ -114,6 +114,23 @@ export default function Motion() {
       { threshold: 0.25, rootMargin: "0px 0px -10% 0px" }
     );
     qa("[data-inview]").forEach((el) => io.observe(el));
+
+    /* The small-screen marquee is a never-ending CSS animation, so park it
+       while the section is off screen rather than keeping a compositor layer
+       churning for the whole page. */
+    const marqueeEl = root.querySelector<HTMLElement>("[data-marquee]");
+    if (marqueeEl) {
+      const runIo = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            marqueeEl.style.animationPlayState = e.isIntersecting ? "" : "paused";
+          });
+        },
+        { rootMargin: "100px 0px" }
+      );
+      runIo.observe(marqueeEl);
+      offs.push(() => runIo.disconnect());
+    }
     offs.push(() => io.disconnect());
 
     /* ---- the opening: word leaves, rules draw, hero words rise ----
@@ -321,27 +338,26 @@ export default function Motion() {
         ).toFixed(3)})`;
       }
       if (marquee) {
-        /* MARQUEE_RATE is % of the strip's own width per pixel scrolled, and
-           the strip is far wider than the viewport — so small numbers here go
-           a long way. It follows raw scroll through its own lerp rather than
-           `cur`, which gives it the lag that reads as weight. */
-        /* Phase 0 holds until the strip is properly in frame, not merely
-           peeking over the bottom edge — otherwise it has already travelled
-           past the start of the phrase by the time it is worth reading. It
-           sits parked on "Selected work" and begins moving from there. */
-        const since = Math.max(0, vh * 0.5 - marquee.getBoundingClientRect().top);
-        mq += (since * MARQUEE_RATE - mq) * 0.14;
-        /* the lunge tracks scroll speed, is clamped so a fast flick cannot
-           throw it, and eases back to rest the moment the scroll stops */
-        /* the lunge is what carries the scroll feel, and it matters MORE on a
-           phone: there the drift must stay tiny to keep the phrase readable,
-           so this is the only channel left. Scaled to the viewport so it is
-           the same visual fraction on a 390px screen as on a 1440px one. */
-        const cap = Math.min(MARQUEE_KICK, window.innerWidth * 0.06);
-        const want = Math.max(-cap, Math.min(cap, dy * 2.2));
-        kick += (want - kick) * 0.12;
-        marquee.style.transform =
-          `translate3d(calc(${(-(mq % 50)).toFixed(2)}% - ${kick.toFixed(1)}px),0,0)`;
+        if (vertical) {
+          /* Small screens have no scroll coupling at all — a CSS keyframe loop
+             runs the strip on its own clock. Leave the inline transform off so
+             the animation owns the element. */
+          if (marquee.style.transform) marquee.style.transform = "";
+        } else {
+          /* Phase 0 holds until the strip is properly in frame, not merely
+             peeking over the bottom edge — otherwise it has already travelled
+             past the start of the phrase by the time it is worth reading. It
+             sits parked on "Selected work" and begins moving from there.
+             MARQUEE_RATE is % of the strip's own width per pixel scrolled. */
+          const since = Math.max(0, vh * 0.5 - marquee.getBoundingClientRect().top);
+          mq += (since * MARQUEE_RATE - mq) * 0.14;
+          /* the lunge tracks scroll speed, is clamped so a fast flick cannot
+             throw it, and eases back to rest the moment the scroll stops */
+          const want = Math.max(-MARQUEE_KICK, Math.min(MARQUEE_KICK, dy * 2.2));
+          kick += (want - kick) * 0.12;
+          marquee.style.transform =
+            `translate3d(calc(${(-(mq % 50)).toFixed(2)}% - ${kick.toFixed(1)}px),0,0)`;
+        }
       }
 
       if (shapesBand && shapes.length) {

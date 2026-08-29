@@ -463,6 +463,19 @@ img { display: block; max-width: 100%; }
   will-change: transform;
   margin-bottom: clamp(var(--space-9), 5vw, var(--space-11));
 }
+/* Small screens drop the scroll coupling entirely and run the strip on its
+   own clock. At 390px only about five characters are on screen at a time, so
+   a scroll-driven offset can only ever show a fragment; a continuous pass is
+   what actually lets the phrase be read. -50% is exactly one copy (see the
+   width: max-content note above), so the loop is seamless. Motion.tsx leaves
+   the inline transform off below this breakpoint so the keyframes own it. */
+@keyframes marquee-run {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@media (max-width: 820px) {
+  [data-marquee] { animation: marquee-run 24s linear infinite; }
+}
 .work__list { display: flex; flex-direction: column; }
 [data-work-item] { display: flex; flex-direction: column; border-top: 1px solid var(--border-subtle); }
 .work__end { border-top: 1px solid var(--border-subtle); }
@@ -995,7 +1008,7 @@ h2.split-parent, span.split-parent { vertical-align: top; }
   [data-grid-col] { transition: none !important; }
   [data-overlay],
   [data-overlay] * { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
-  [data-marquee] { transform: none !important; }
+  [data-marquee] { transform: none !important; animation: none !important; }
 }
 
 /* ---------------------------------------------------------------------------
