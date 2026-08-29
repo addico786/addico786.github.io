@@ -54,7 +54,7 @@ const jsonLd = {
   name: site.name,
   url: site.url,
   email: `mailto:${site.email}`,
-  image: `${site.url}/work/adnan.png`,
+  image: `${site.url}/work/adnan.webp`,
   description,
   areaServed: "Worldwide",
   address: {
