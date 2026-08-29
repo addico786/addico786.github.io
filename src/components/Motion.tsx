@@ -152,6 +152,7 @@ export default function Motion() {
       root.classList.add("is-ruled");
       heroSection?.classList.add("is-intro");
       revealHero();
+      clearTimeout((window as unknown as { __introFailsafe?: number }).__introFailsafe);
     } else if (opener) {
       lenis?.stop();
       document.body.style.overflow = "hidden";
@@ -192,6 +193,8 @@ export default function Motion() {
         setTimeout(() => {
           heroSection?.classList.add("is-intro");
           revealHero();
+          /* the intro got this far, so the bootstrap failsafe is not needed */
+          clearTimeout((window as unknown as { __introFailsafe?: number }).__introFailsafe);
         }, 1900)
       );
     }

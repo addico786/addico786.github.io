@@ -80,6 +80,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* Progressive enhancement + failsafe. The opener panel and the hero
+            words are hidden by CSS and revealed by Motion.tsx. If the bundle
+            never runs — chunk 404, CSP block, a throw in an effect — the
+            visitor would otherwise be stuck on a blank panel forever.
+            `js` gates the hidden states; the timer un-gates them if the intro
+            has not finished, and Motion clears it on success. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js');" +
+              "window.__introFailsafe=setTimeout(function(){" +
+              "document.documentElement.classList.add('intro-failed')},4000)",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

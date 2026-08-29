@@ -1049,3 +1049,21 @@ h2.split-parent, span.split-parent { vertical-align: top; }
 
 /* The h1 wraps the hero stack; it must not introduce a box of its own. */
 .hero__h1 { display: contents; font: inherit; }
+
+/* ---------------------------------------------------------------------------
+   Failsafe. The opener and the hero words are hidden so JS can animate them
+   in. Nothing that only JS can undo may hide content by default, or a bundle
+   that never runs leaves the page blank. Both states are gated on `js`, and
+   released again if the intro does not finish.
+   ------------------------------------------------------------------------- */
+[data-opener] { display: none; }
+.js [data-opener] { display: flex; }
+.js.intro-failed [data-opener] { display: none; }
+
+[data-hero-rise] { opacity: 1; }
+.js [data-hero-rise] { opacity: 0; }
+.js.intro-failed [data-hero-rise] { opacity: 1; }
+
+.intro-failed [data-grid-col] { transform: scaleY(1); opacity: 1; }
+.intro-failed [data-hero-band]::after,
+.intro-failed [data-hero-band]:last-child::before { transform: none; opacity: 1; }
