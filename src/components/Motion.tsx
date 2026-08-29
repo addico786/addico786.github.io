@@ -231,6 +231,12 @@ export default function Motion() {
                  scroll feel and contributes no distance at all */
     const MARQUEE_RATE = 0.015;
     const MARQUEE_KICK = 70;
+    /* Small screens cannot have it both ways: the strip is ~2381px against a
+       390px viewport, so a sixth of the phrase is on screen at once and the
+       slow drift leaves it parked mid-word with the start cut off. There the
+       original fast positional sweep is the readable one, and the velocity
+       lunge is dropped with it. */
+    const MARQUEE_RATE_SMALL = 0.12;
     const media = root.querySelector<HTMLElement>("[data-hero-media]");
     const heroFade = root.querySelector<HTMLElement>("[data-hero-fade]");
     const marquee = root.querySelector<HTMLElement>("[data-marquee]");
@@ -324,10 +330,12 @@ export default function Motion() {
            the strip is far wider than the viewport — so small numbers here go
            a long way. It follows raw scroll through its own lerp rather than
            `cur`, which gives it the lag that reads as weight. */
-        mq += (target * MARQUEE_RATE - mq) * 0.14;
+        mq += (target * (vertical ? MARQUEE_RATE_SMALL : MARQUEE_RATE) - mq) * 0.14;
         /* the lunge tracks scroll speed, is clamped so a fast flick cannot
            throw it, and eases back to rest the moment the scroll stops */
-        const want = Math.max(-MARQUEE_KICK, Math.min(MARQUEE_KICK, dy * 2.2));
+        const want = vertical
+          ? 0
+          : Math.max(-MARQUEE_KICK, Math.min(MARQUEE_KICK, dy * 2.2));
         kick += (want - kick) * 0.12;
         marquee.style.transform =
           `translate3d(calc(${(-(mq % 50)).toFixed(2)}% - ${kick.toFixed(1)}px),0,0)`;
