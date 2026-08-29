@@ -21,8 +21,8 @@ export const site = {
   socials: [
     { label: "Instagram", href: "https://www.instagram.com/adnan_khan42004" },
     { label: "X", href: "https://x.com/adnan_ka4" },
-    { label: "GitHub", href: "https://github.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
+    { label: "GitHub", href: "https://github.com/addico786" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/adnan-khan-afridi-46595129a/" },
   ],
 
   /** Four hero bands. `drift` sets which way the word slides on scroll. */
