@@ -39,6 +39,12 @@ export default function Motion() {
       offs.push(() => el.removeEventListener(ev as string, fn, o));
     };
 
+    /* The bootstrap failsafe fires 4s after page start; the intro is timed
+       from hydration. On a slow device those clocks diverge and the failsafe
+       lands mid-intro, snapping everything visible. This effect running is
+       proof the bundle is alive, which is all the failsafe was watching for. */
+    clearTimeout((window as unknown as { __introFailsafe?: number }).__introFailsafe);
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const touch = window.matchMedia("(hover: none)").matches;
 
@@ -146,13 +152,18 @@ export default function Motion() {
     };
     offs.push(() => splits.forEach((s) => s.revert()));
 
-    if (reduced) {
+    /* If hydration was slow enough that the failsafe already revealed the
+       page, do not play the opener over it — settle straight into the end
+       state instead. */
+    const alreadyRevealed = document.documentElement.classList.contains("intro-failed");
+
+    if (reduced || alreadyRevealed) {
       if (opener) opener.style.display = "none";
       grid?.classList.add("is-drawn");
       root.classList.add("is-ruled");
       heroSection?.classList.add("is-intro");
       revealHero();
-      clearTimeout((window as unknown as { __introFailsafe?: number }).__introFailsafe);
+      document.documentElement.classList.remove("intro-failed");
     } else if (opener) {
       lenis?.stop();
       document.body.style.overflow = "hidden";
@@ -163,14 +174,18 @@ export default function Motion() {
       timers.push(
         setTimeout(() => {
           const chars = opener.querySelectorAll(".split-char");
-          if (chars.length) {
-            gsap.to(chars, {
+          /* SplitText only splits once fonts resolve. On a cold load that has
+             not happened yet, so fall back to the word itself — otherwise the
+             exit is skipped and the word just disappears. */
+          const target = chars.length ? chars : opener.querySelector(".opener__word");
+          if (target) {
+            gsap.to(target, {
               opacity: 0,
               y: -24,
               scaleX: 0.4,
               duration: 0.45,
               ease: "power2.in",
-              stagger: 0.025,
+              stagger: chars.length ? 0.025 : 0,
             });
           }
         }, 1100)
@@ -193,8 +208,6 @@ export default function Motion() {
         setTimeout(() => {
           heroSection?.classList.add("is-intro");
           revealHero();
-          /* the intro got this far, so the bootstrap failsafe is not needed */
-          clearTimeout((window as unknown as { __introFailsafe?: number }).__introFailsafe);
         }, 1900)
       );
     }

@@ -789,7 +789,13 @@ img { display: block; max-width: 100%; }
    from disturbing the type it is splitting.
    ------------------------------------------------------------------------- */
 .split-parent { max-width: 100%; }
-.split-char { will-change: transform, opacity; }
+/* SplitText stamps will-change on every character, and there are 600+ of
+   them. Each becomes a promoted compositor layer — invisible on desktop,
+   severe GPU memory pressure on a phone. Transform and opacity animations are
+   composited without the hint, so drop it. */
+.split-char,
+.split-word,
+.split-line { will-change: auto !important; }
 /* an inline-block parent baselines on its bottom margin edge, which drops
    headings a few px; align it back to the text it replaced */
 h2.split-parent, span.split-parent { vertical-align: top; }
