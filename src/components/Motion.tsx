@@ -299,11 +299,17 @@ export default function Motion() {
       }
       if (menu) {
         /* The hero owns the full screen: the bar only rides in once the body
-           has been reached, then hides again on the way back up into it. */
-        const show = target > vh * 0.75;
-        if (show !== mini) {
-          mini = show;
-          menu.style.transform = show ? "translateY(0)" : "translateY(-110%)";
+           has been reached, then hides again on the way back up into it.
+           Two thresholds, not one — a single boundary meant any scroll that
+           oscillated across it toggled the bar every crossing, and with a
+           0.6s transition it never finished sliding. Nothing changes inside
+           the band. */
+        if (!mini && target > vh * 0.8) {
+          mini = true;
+          menu.style.transform = "translateY(0)";
+        } else if (mini && target < vh * 0.55) {
+          mini = false;
+          menu.style.transform = "translateY(-110%)";
         }
       }
       lastY = target;
