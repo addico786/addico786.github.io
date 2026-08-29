@@ -186,10 +186,30 @@ export default function Home() {
             <p className="svc__kicker u-mono ds-fade-up">What I do</p>
             <ul className="svc__list">
               {site.services.map((sv, i) => (
-                <li key={sv.title} className="svc ds-fade-up" style={{ ["--i" as string]: i }}>
-                  <h3 className="svc__title">{sv.title}</h3>
-                  <p className="svc__line">{sv.line}</p>
-                  <ul className="svc__tags">
+                <li key={sv.title} className="svc">
+                  {/* same treatment as About: chars on the display line,
+                      words on the copy — a sentence revealed letter by letter
+                      trickles in for seconds and reads as a bug */}
+                  <SplitText
+                    tag="h3"
+                    className="svc__title"
+                    text={sv.title}
+                    textAlign="left"
+                    delay={26}
+                    duration={0.6}
+                    ease="power2.out"
+                  />
+                  <SplitText
+                    tag="p"
+                    className="svc__line"
+                    text={sv.line}
+                    textAlign="left"
+                    splitType="words"
+                    delay={22}
+                    duration={0.5}
+                    ease="power2.out"
+                  />
+                  <ul className="svc__tags ds-fade-up" style={{ ["--i" as string]: i }}>
                     {sv.tags.map((t) => (
                       <li key={t} className="u-mono">{t}</li>
                     ))}
