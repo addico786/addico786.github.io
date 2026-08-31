@@ -14,7 +14,7 @@ export const site = {
 
   nav: [
     { label: "About", hover: "Delhi", href: "#about", index: "01" },
-    { label: "Work", hover: "Six", href: "#work", index: "02" },
+    { label: "Work", hover: "Seven", href: "#work", index: "02" },
     { label: "Journal", hover: "Writing", href: "/blog", index: "03" },
     { label: "Say hello", hover: "Email", href: "#contact", index: "04" },
   ],
@@ -173,6 +173,19 @@ export const site = {
       image: "/work/utb.webp" as string | undefined,
       blurb:
         "A construction company site built to load fast on a phone at a site visit.",
+    },
+    {
+      title: "Readingspace",
+      discipline: "Astro, Local SEO",
+      year: "2026",
+      href: "https://readingspace.in",
+      linkLabel: "readingspace.in",
+      slot: "shot-readingspace",
+      placeholder: "Readingspace screenshot",
+      alt: "Readingspace, a 24/7 study library in Batla House, New Delhi, with membership plans and reserved seats",
+      image: "/work/readingspace.webp" as string | undefined,
+      blurb:
+        "A 24/7 study library in Batla House, built to be found by a student searching at midnight.",
     },
     {
       title: "PRD Decomposer",

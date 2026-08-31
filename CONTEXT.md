@@ -224,6 +224,12 @@ vs 3) or the column rules only survive on the hero.
 **Verify at 390px, not just 1440.** Several rounds of marquee work were spent
 tuning on desktop while the actual complaint was about a phone.
 
+**Adding a project touches one array and one hardcoded word.** The numbering,
+the marquee's spelled-out count and the `llms.txt` listing all derive from
+`site.projects`. The nav's hover word does not — `site.nav` has
+`{ label: "Work", hover: "Seven" }` written out. It is the only count on the
+site that can silently go stale.
+
 ---
 
 ## Deploying
