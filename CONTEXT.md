@@ -93,6 +93,104 @@ instead of half the *content*, jumping every cycle.
 
 ---
 
+## The blog
+
+`/blog` and `/blog/[slug]`, added August 2026. Posts are markdown files in
+`src/content/blog`, read at build time by `src/lib/posts.ts`.
+
+**Markdown, not MDX, and one dependency.** `marked` runs during `next build`
+and emits an HTML string, so nothing about the markdown pipeline reaches the
+browser. Frontmatter is parsed by ~15 lines in `posts.ts` rather than a YAML
+dependency, because these files are authored in this repo and the format is
+fixed. A post missing `title`, `description` or `date` **fails the build** —
+there is no sensible default for any of them, and the alternative is the word
+`undefined` on a live page.
+
+**Blog routes ship no motion bundle.** 562KB against the home page's 698KB,
+all of the difference being GSAP + Lenis + `Motion.tsx`. Nothing under
+`/blog` is a client component. What remains is the React/Next hydration
+baseline, which a static export cannot drop — do not describe these pages as
+"zero JS", because they are not. They *are* fully readable with JS disabled,
+which is the claim one of the posts makes, so it has to keep holding.
+
+**Do not add the site nav to blog pages.** The overlay nav needs the motion
+bundle, and its links are `#about`-style anchors that go nowhere from
+`/blog/*`. The thin sticky `.blog__bar` exists for exactly this reason.
+`Motion.tsx` only intercepts `a[href^="#"]`, so the `/blog` entry in
+`site.nav` passes through untouched.
+
+**Tables get wrapped.** `withScrollableTables` in `posts.ts` puts every
+`<table>` in a `.prose__scroll` div. The prose column is 40rem and a
+four-column price table is not — without this the page body scrolls
+horizontally on a phone.
+
+Reading time and post ordering are derived, never written by hand. Dates are
+deliberately staggered so the pricing post leads.
+
+---
+
+## AEO / GEO
+
+Two acronyms that arrived in 2026. AEO is winning the answer box; GEO is being
+cited inside a generated answer. Concretely, both come down to being one
+unambiguous entity that states checkable facts.
+
+**The entity graph is the whole trick.** `layout.tsx` exports `ID` and emits a
+single `@graph` — `Person`, `ProfessionalService`, `WebSite` — where every node
+carries a stable `@id` and references the others by it. Blog posts join the
+same graph: `author` and `publisher` are `{ "@id": ID.person }`, not a repeated
+name. **The `@id` values are permanent URLs.** Change one and you silently
+split yourself into two entities, which is the exact failure this is built to
+prevent.
+
+**The FAQ is drafted but deliberately NOT live.** `site.faqs` exists and the
+`.faq__*` styles are in place, but nothing renders it and no `FAQPage` is
+emitted. The answers commit to pricing, timelines and ownership terms in
+Adnan's voice, and were drafted by Claude — publishing them as `FAQPage` would
+republish them to Google and every assistant as his stated terms. **They need
+his approval first.**
+
+When enabling: render the array on the home page **and** emit `FAQPage` from
+the same array — never one without the other. Markup claiming answers a visitor
+cannot read is a manual action, not a ranking boost. This is the single biggest
+AEO win still on the table.
+
+**`.ds-fade-up` is `.js`-gated, and must stay that way.** It used to set
+`opacity: 0` unconditionally, which meant the FAQ kicker and the contact line
+were invisible to anything that did not run JS. That contradicted the rule
+below about JS-only hiding, and it was found by screenshotting with script
+execution disabled — not by reading the CSS.
+
+**`/llms.txt` is generated, and is not expected to do much.** Ahrefs found 97%
+of these files drew zero traffic in May 2026 and no major assistant documents
+it as a citation signal. It is a route handler so it cannot rot; that is the
+only reason it is cheap enough to keep.
+
+`robots.ts` names the answer-engine crawlers explicitly. `User-agent: *`
+already allows them, so this changes no behaviour — it is there so a future
+tightening of the wildcard cannot silently lock the assistants out.
+
+---
+
+## The free tool
+
+`/tools/schema` — a local business JSON-LD generator. `SchemaBuilder.tsx` is
+the only client component outside the home page's motion.
+
+It exists to earn links and rank for a real keyword, but the reason to prefer
+it over the twenty other schema generators is one checkbox: **"I visit clients
+— I do not receive them."** Ticking it drops `streetAddress` and `postalCode`
+while keeping `addressLocality` and `addressCountry`. Most generators offer
+all-or-nothing, so a service-area business either publishes a home address or
+drops the address block entirely and loses the local signal. This was a real
+blocker on the Urban Tech Buildings project.
+
+Everything runs in the browser; nothing is uploaded, and the page says so. Keep
+it that way — the moment it posts anywhere it needs a privacy policy and stops
+being a five-minute tool.
+
+---
+
 ## Traps
 
 **`will-change` on split text.** SplitText stamps it on every fragment; that
@@ -181,6 +279,13 @@ Two things that produced wrong answers here:
 
 - **GIFs/screenshots** for PRD Decomposer, Blog Engine and NFC Cards. Drop in
   `public/work/`, set `image:` on the project in `src/data/site.ts`.
+- **The FAQ** — drafted in `src/data/site.ts`, not rendered. Approve the
+  wording and wire it up; see the AEO / GEO section.
+- **A second free tool.** The schema generator is live at `/tools/schema`. The
+  better lead magnet is an "audit my site's AI visibility" checker, but it
+  needs a Cloudflare Worker for the cross-origin fetch.
+- **Case studies** — still the highest-value writing left, above more blog
+  posts. Six projects, nothing written about any of them.
 - **NAP inconsistency** — this site says `hello@adnankhan.tech`, the old one
   says `adnandelhi2004@gmail.com`. One needs picking; it is in the JSON-LD.
 - **SEO phases 2–4** — see `SEO-PLAN.md`. Search Console + Google Business

@@ -1,0 +1,356 @@
+/* ---------------------------------------------------------------------------
+ * Blog. A reading surface, not a motion surface.
+ *
+ * These routes deliberately ship no GSAP, no Lenis and no Motion.tsx: 562KB
+ * against the home page's 698KB, all of the difference being the motion
+ * bundle. What remains is the React/Next hydration baseline, which a static
+ * export cannot drop. Nothing here is a client component — every effect below
+ * is CSS on the existing tokens, so a post renders fully with JS disabled.
+ * One of these posts argues that point, so it had better hold on the page
+ * making it.
+ * ------------------------------------------------------------------------- */
+
+.blog {
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* --- masthead ----------------------------------------------------------- */
+/* Sticky and hairline-thin, so the reader keeps a way home without the full
+   overlay nav — which cannot come along, since it needs the motion bundle. */
+.blog__bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-5);
+  background: color-mix(in oklab, var(--surface-canvas) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.blog__mark {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-tight);
+  font-size: var(--text-base);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+.blog__barlinks { display: flex; gap: var(--space-6); }
+.blog__barlinks a { text-decoration: none; }
+.blog__barlinks a:hover { color: var(--text-primary); }
+
+/* --- index -------------------------------------------------------------- */
+.blog__head { padding-top: clamp(var(--space-10), 8vw, var(--space-12)); }
+.blog__title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: var(--leading-display);
+  font-size: clamp(2.5rem, 9vw, var(--text-4xl));
+  margin: var(--space-6) 0 0;
+  text-wrap: balance;
+}
+.blog__standfirst {
+  max-width: 34em;
+  margin: var(--space-7) 0 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.blog__list { list-style: none; margin: clamp(var(--space-10), 7vw, var(--space-11)) 0 0; padding: 0; }
+.blog__row { border-top: 1px solid var(--border-subtle); }
+.blog__row:last-child { border-bottom: 1px solid var(--border-subtle); }
+
+/* The whole row is the target — a 44px-plus hit area on a phone, and one
+   tab stop per post instead of one per link inside it. */
+.blog__link {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: var(--space-4) var(--space-6);
+  align-items: start;
+  padding-block: clamp(var(--space-8), 4vw, var(--space-9));
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--dur-fast) var(--ease-out-cubic);
+}
+.blog__link:hover { background: var(--surface-raised); }
+.blog__num { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: var(--track-eyebrow); color: var(--text-muted); padding-top: 0.4em; }
+.blog__rowtitle {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  font-size: clamp(1.5rem, 4vw, var(--text-2xl));
+  margin: 0;
+  text-wrap: balance;
+}
+.blog__rowdesc { margin: var(--space-5) 0 0; max-width: 46em; color: var(--text-muted); line-height: var(--leading-snug); }
+.blog__meta { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-top: var(--space-6); }
+
+/* --- article ------------------------------------------------------------ */
+.post { padding-top: clamp(var(--space-10), 8vw, var(--space-11)); }
+.post__head { max-width: 46rem; }
+.post__title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: var(--leading-display);
+  font-size: clamp(2.125rem, 6.5vw, var(--text-3xl));
+  margin: var(--space-6) 0 0;
+  text-wrap: balance;
+}
+.post__standfirst {
+  margin: var(--space-7) 0 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+.post__dateline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* --- prose -------------------------------------------------------------- */
+/* One measure, set once. 68ch keeps 8–12 words a line at this size, which is
+   the band where line-tracking stays comfortable. */
+.prose {
+  max-width: 40rem;
+  margin-top: clamp(var(--space-9), 5vw, var(--space-10));
+  font-size: clamp(var(--text-base), 0.98rem + 0.22vw, 1.1875rem);
+  line-height: var(--leading-body);
+}
+.prose > * + * { margin-top: var(--space-7); }
+.prose p { text-wrap: pretty; }
+
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  font-size: clamp(1.5rem, 3.4vw, var(--text-xl));
+  margin-top: clamp(var(--space-9), 5vw, var(--space-10));
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--border-subtle);
+  text-wrap: balance;
+}
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-tight);
+  font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
+  margin-top: var(--space-9);
+  text-wrap: balance;
+}
+
+.prose a { color: var(--text-primary); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; text-decoration-color: var(--border-strong); }
+.prose a:hover { text-decoration-color: currentColor; }
+.prose strong { font-weight: var(--weight-label); }
+
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li + li { margin-top: var(--space-5); }
+.prose li::marker { color: var(--text-muted); }
+
+/* A pull-quote for the one line per post worth stopping on. */
+.prose blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: var(--space-7);
+  border-left: 2px solid var(--interactive-primary);
+  font-size: 1.0625em;
+  color: var(--text-primary);
+}
+.prose blockquote p { margin: 0; }
+.prose blockquote p + p { margin-top: var(--space-6); }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--surface-sunk);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-xs);
+}
+.prose pre {
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+  overflow-x: auto;
+}
+.prose pre code { background: none; padding: 0; font-size: var(--text-sm); }
+
+.prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin-block: clamp(var(--space-9), 5vw, var(--space-10)); }
+
+/* Tables carry the real numbers in these posts, so they get a proper
+   treatment rather than browser defaults — and their own scroll container,
+   because a price table will not fit 390px however it is styled. */
+.prose__scroll { overflow-x: auto; }
+.prose table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.prose th, .prose td { text-align: left; padding: var(--space-5) var(--space-6) var(--space-5) 0; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+.prose th { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: var(--track-eyebrow); text-transform: uppercase; color: var(--text-muted); font-weight: var(--weight-body); }
+.prose tbody tr:last-child td { border-bottom: 0; }
+
+/* --- end matter --------------------------------------------------------- */
+.post__cta {
+  max-width: 40rem;
+  margin-top: clamp(var(--space-10), 7vw, var(--space-11));
+  padding-top: var(--space-9);
+  border-top: 1px solid var(--border-strong);
+}
+.post__ctaline {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  font-size: clamp(1.375rem, 3.2vw, 1.875rem);
+  margin: var(--space-6) 0 0;
+  text-wrap: balance;
+}
+.post__ctamail {
+  display: inline-block;
+  margin-top: var(--space-8);
+  font-size: var(--text-lg);
+  color: var(--interactive-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.blog__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  justify-content: space-between;
+  margin-top: clamp(var(--space-10), 7vw, var(--space-11));
+  padding-block: var(--space-9);
+  border-top: 1px solid var(--border-subtle);
+}
+.blog__foot a { text-decoration: none; }
+.blog__foot a:hover { color: var(--text-primary); }
+
+@media (max-width: 640px) {
+  .blog__link { grid-template-columns: 1fr; gap: var(--space-5); }
+  .blog__num { padding-top: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Schema generator. Two columns on desktop: form left, live output right and
+ * sticky, so the markup visibly changes as you type. One column below 900px.
+ * ------------------------------------------------------------------------- */
+.sb {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(var(--space-9), 4vw, var(--space-11));
+  margin-top: clamp(var(--space-9), 6vw, var(--space-10));
+  align-items: start;
+}
+.sb__form { display: flex; flex-direction: column; gap: var(--space-9); min-width: 0; }
+
+.sb__group { border: 0; padding: 0; margin: 0; min-width: 0; }
+.sb__legend {
+  padding: 0 0 var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+  width: 100%;
+  margin-bottom: var(--space-7);
+}
+.sb__field { display: block; margin-bottom: var(--space-7); }
+.sb__label { display: block; margin-bottom: var(--space-4); }
+.sb__input {
+  width: 100%;
+  font: inherit;
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5) var(--space-6);
+  transition: border-color var(--dur-fast) var(--ease-out-cubic);
+}
+.sb__input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+.sb__input--area { resize: vertical; line-height: var(--leading-snug); }
+.sb__hint {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-snug);
+}
+
+.sb__check { display: flex; gap: var(--space-5); align-items: start; margin-bottom: var(--space-7); }
+.sb__check input { margin-top: 0.3em; flex: none; width: 1rem; height: 1rem; accent-color: var(--interactive-primary); }
+.sb__check strong { display: block; font-weight: var(--weight-label); }
+
+.sb__days { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-bottom: var(--space-7); }
+.sb__day { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); }
+.sb__day input { accent-color: var(--interactive-primary); width: 1rem; height: 1rem; }
+.sb__times { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+
+/* Output. Sticky so it stays visible while the long form scrolls past. */
+.sb__out {
+  position: sticky;
+  top: 5rem;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+  background: var(--surface-sunk);
+}
+.sb__outhead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-6); }
+.sb__copy {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--interactive-primary-text);
+  background: var(--interactive-primary);
+  border: 0;
+  border-radius: var(--radius-xs);
+  padding: var(--space-4) var(--space-6);
+}
+.sb__copy:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.sb__code {
+  width: 100%;
+  min-height: 22rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-primary);
+  background: var(--surface-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-6);
+  resize: vertical;
+  white-space: pre;
+  overflow: auto;
+}
+.sb__warn {
+  margin: var(--space-7) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+.sb__warn li + li { margin-top: var(--space-4); }
+.sb__next { margin-top: var(--space-7); }
+.sb__next code { font-family: var(--font-mono); font-size: 0.9em; }
+
+@media (max-width: 900px) {
+  .sb { grid-template-columns: 1fr; }
+  /* Sticky in a single column would pin the output over the form. */
+  .sb__out { position: static; }
+}

@@ -1,0 +1,107 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ID } from "@/app/layout";
+import { site } from "@/data/site";
+import { allPosts, formatDate } from "@/lib/posts";
+
+const title = "Journal";
+const description =
+  "Plain answers on what websites cost, why search has stopped sending clicks, and what to build now — from a freelance developer in Delhi.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    type: "website",
+    url: `${site.url}/blog`,
+    title: `${title} — ${site.name}`,
+    description,
+  },
+};
+
+export default function BlogIndex() {
+  const posts = allPosts();
+
+  /* Blog is a listing page, so it gets its own Blog + ItemList graph rather
+     than inheriting only the site-wide ProfessionalService from the layout. */
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${site.url}/blog#blog`,
+    name: `${title} — ${site.name}`,
+    description,
+    url: `${site.url}/blog`,
+    author: { "@id": ID.person },
+    publisher: { "@id": ID.person },
+    isPartOf: { "@id": ID.website },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      description: p.description,
+      datePublished: p.date,
+      url: `${site.url}/blog/${p.slug}`,
+    })),
+  };
+
+  return (
+    <div className="blog">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <div className="u-shell u-gutter">
+        <header className="blog__bar">
+          <Link href="/" className="blog__mark">
+            {site.name}
+          </Link>
+          <nav className="blog__barlinks u-mono">
+            <Link href="/#work">Work</Link>
+            <a href={`mailto:${site.email}`}>Say hello</a>
+          </nav>
+        </header>
+
+        <div className="blog__head">
+          <p className="u-mono">Journal</p>
+          <h1 className="blog__title">
+            Straight answers about the things clients ask before they hire anyone.
+          </h1>
+          <p className="blog__standfirst">
+            What a website really costs, why search stopped sending traffic, and
+            what actually needs building now. No hedging, and no numbers I would
+            not quote you in an email.
+          </p>
+        </div>
+
+        {posts.length === 0 ? (
+          <p className="blog__standfirst">First pieces are being written.</p>
+        ) : (
+          <ol className="blog__list">
+            {posts.map((post, i) => (
+              <li key={post.slug} className="blog__row">
+                <Link href={`/blog/${post.slug}`} className="blog__link">
+                  <span className="blog__num">{String(i + 1).padStart(2, "0")}</span>
+                  <span>
+                    <h2 className="blog__rowtitle">{post.title}</h2>
+                    <p className="blog__rowdesc">{post.description}</p>
+                    <span className="blog__meta u-mono">
+                      <span>{post.kicker}</span>
+                      <time dateTime={post.date}>{formatDate(post.date)}</time>
+                      <span>{post.minutes} min read</span>
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        )}
+
+        <footer className="blog__foot u-mono">
+          <Link href="/">Back to the site</Link>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </footer>
+      </div>
+    </div>
+  );
+}

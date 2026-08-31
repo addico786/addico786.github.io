@@ -47,31 +47,102 @@ export const metadata: Metadata = {
   },
 };
 
-/** Person + the services offered, so Google can read this as a business. */
+/**
+ * One entity graph for the whole site, not three loose objects.
+ *
+ * Every node carries a stable `@id` and references the others by it, so a
+ * crawler — or a model assembling an answer — resolves "Adnan Khan", the
+ * practice, the site and every blog post to the SAME entity instead of
+ * guessing that they are related. This is the part of GEO/AEO that is real
+ * engineering rather than vocabulary: entity consolidation. The `@id` values
+ * are permanent URLs. Changing one silently splits the entity in two.
+ */
+export const ID = {
+  person: `${site.url}/#person`,
+  business: `${site.url}/#business`,
+  website: `${site.url}/#website`,
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: site.name,
-  url: site.url,
-  email: `mailto:${site.email}`,
-  image: `${site.url}/work/adnan.webp`,
-  description,
-  areaServed: "Worldwide",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Delhi",
-    addressCountry: "IN",
-  },
-  founder: { "@type": "Person", name: "Adnan Khan", jobTitle: "Web Developer" },
-  sameAs: site.socials.map((s) => s.href),
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Services",
-    itemListElement: site.services.map((sv) => ({
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: sv.title, description: sv.line },
-    })),
-  },
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": ID.person,
+      name: "Adnan Khan",
+      url: site.url,
+      email: `mailto:${site.email}`,
+      image: `${site.url}/work/adnan.webp`,
+      jobTitle: "Freelance Web Developer",
+      description,
+      address: { "@type": "PostalAddress", addressLocality: "Delhi", addressCountry: "IN" },
+      /* Declares topical expertise explicitly rather than leaving a model to
+         infer it from prose. Cheap, and it is what AI assistants match a
+         question against when deciding who to cite. */
+      knowsAbout: [
+        "Web development",
+        "Next.js",
+        "React",
+        "Technical SEO",
+        "Core Web Vitals",
+        "Structured data",
+        "Answer engine optimisation",
+        "Workflow automation",
+        "n8n",
+        "Cloud infrastructure",
+        "DevOps",
+        "Terraform",
+        "Chrome extension development",
+      ],
+      sameAs: site.socials.map((s) => s.href),
+      worksFor: { "@id": ID.business },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": ID.business,
+      name: site.name,
+      url: site.url,
+      email: `mailto:${site.email}`,
+      image: `${site.url}/work/adnan.webp`,
+      description,
+      priceRange: "₹₹",
+      /* Named places, not "Worldwide". Local answer engines need the city
+         stated to include you in a "near me" answer at all; the country and
+         the remote note keep the non-local work in scope. */
+      areaServed: [
+        { "@type": "City", name: "Delhi" },
+        { "@type": "AdministrativeArea", name: "Delhi NCR" },
+        { "@type": "Country", name: "India" },
+      ],
+      address: { "@type": "PostalAddress", addressLocality: "Delhi", addressCountry: "IN" },
+      founder: { "@id": ID.person },
+      employee: { "@id": ID.person },
+      sameAs: site.socials.map((s) => s.href),
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Services",
+        itemListElement: site.services.map((sv) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: sv.title,
+            description: sv.line,
+            provider: { "@id": ID.business },
+            areaServed: { "@type": "Country", name: "India" },
+          },
+        })),
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": ID.website,
+      url: site.url,
+      name: `${site.name} — ${site.tagline}`,
+      description,
+      inLanguage: "en-IN",
+      publisher: { "@id": ID.person },
+    },
+  ],
 };
 
 export default function RootLayout({

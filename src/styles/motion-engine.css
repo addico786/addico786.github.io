@@ -44,8 +44,15 @@
 .ds-rotator-item.is-leaving .ds-line-inner{transition-duration:var(--dur-slow);transform:translate3d(0,calc(-1 * var(--rise-line)),0)}
 
 /* --- 5. Fade up (generic scroll reveal) --------------------------------- */
-.ds-fade-up{opacity:0;transform:translate3d(0,var(--rise-fade),0);transition-property:opacity,transform;transition-duration:var(--dur-base);transition-timing-function:var(--ease-out-cubic);transition-delay:calc(var(--delay-base) + var(--i, 0) * var(--stagger-line))}
-.ds-fade-up.is-inview{opacity:1;transform:translate3d(0,0,0)}
+/* The hidden state is gated behind `.js`, like every other intro state in
+   site.css. Ungated, a reveal that never fires — scripts blocked, a chunk
+   404, an agent that does not run JS — leaves the element at opacity 0
+   permanently, and the FAQ kicker and contact line simply do not exist for
+   that visitor. `.intro-failed` is the same 4s failsafe the opener uses. */
+.ds-fade-up{transition-property:opacity,transform;transition-duration:var(--dur-base);transition-timing-function:var(--ease-out-cubic);transition-delay:calc(var(--delay-base) + var(--i, 0) * var(--stagger-line))}
+.js .ds-fade-up{opacity:0;transform:translate3d(0,var(--rise-fade),0)}
+.ds-fade-up.is-inview,
+.intro-failed .ds-fade-up{opacity:1;transform:translate3d(0,0,0)}
 
 /* Screen-reader-only text, for split containers that keep the real string. */
 .ds-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}

@@ -21,7 +21,7 @@ service and problem keywords, not proximity. Phase 2 is weighted accordingly.
 | Description | Services + location + availability, 155 chars |
 | Open Graph | `og:title`, `og:description`, `og:url`, `og:image` (1200×630 card) |
 | Twitter card | `summary_large_image`, `@adnan_ka4` |
-| Structured data | `ProfessionalService` + `OfferCatalog` of all five services |
+| Structured data | Linked `@graph`: `Person` + `ProfessionalService` + `WebSite`, `FAQPage`, `BlogPosting` |
 | Canonical | `https://adnankhan.tech` |
 | `h1` | One, stating the proposition |
 | Image alt text | Descriptive on every image |
@@ -31,6 +31,24 @@ Schema note: the template specified `LocalBusiness` / `GeneralContractor`.
 `ProfessionalService` is the correct type here — it is a `LocalBusiness`
 subtype, so it keeps the local signals (address, `areaServed`) while describing
 a service practice rather than a contractor with a yard.
+
+### AEO / GEO — added August 2026
+
+Two acronyms doing the rounds. **AEO** (answer engine optimisation) is about
+winning the answer box; **GEO** (generative engine optimisation) is about being
+the source cited *inside* a generated answer. In practice they ask for the same
+four things, and all four are now in place:
+
+| Signal | Where it lives |
+| --- | --- |
+| One resolvable entity, not three loose objects | `@graph` with stable `@id`s in `layout.tsx` |
+| Declared expertise | `knowsAbout` on the `Person` node |
+| Named service area, not "Worldwide" | `areaServed`: Delhi, Delhi NCR, India |
+| Extractable answers with real numbers | `site.faqs` → visible FAQ **and** `FAQPage` schema |
+
+The rest of it — GBP, reviews, NAP consistency — is off-site and is Phase 2.
+That is deliberate: for local AI answers, the Business Profile now carries more
+weight than the website does.
 
 **Everything above regenerates from `src/data/site.ts`.** Add a service and it
 enters the `OfferCatalog` automatically. Nothing is hand-maintained.
@@ -104,6 +122,19 @@ thing a prospective client actually reads before emailing you.
 
 The problem column is where seomachine earns its place — those are blog posts,
 and that repo exists to write them at volume once `/blog` exists.
+
+### Blog — done (August 2026)
+
+`/blog` exists, with three buyer-stage posts. Topics were chosen against 2026
+search behaviour rather than volume: pricing (where every competing page is an
+agency with a reason to quote high), AI-search visibility, and agent-readable
+markup. See `CONTEXT.md` for how the route works and `SEO-SETUP.md` for the
+Search Console steps.
+
+One caution, since the Blog Engine makes volume cheap: **do not publish at
+volume.** Six to ten real posts, one every week or two, human-edited. Thin
+AI-generated content on a new section is exactly what Google's helpful-content
+system targets, and it drags the whole domain — not just the thin pages.
 
 ---
 

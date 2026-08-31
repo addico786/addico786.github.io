@@ -15,7 +15,8 @@ export const site = {
   nav: [
     { label: "About", hover: "Delhi", href: "#about", index: "01" },
     { label: "Work", hover: "Six", href: "#work", index: "02" },
-    { label: "Say hello", hover: "Email", href: "#contact", index: "03" },
+    { label: "Journal", hover: "Writing", href: "/blog", index: "03" },
+    { label: "Say hello", hover: "Email", href: "#contact", index: "04" },
   ],
 
   socials: [
@@ -75,6 +76,50 @@ export const site = {
       tags: ["Manifest V3", "Workers", "D1"],
     },
   ],
+
+
+  /**
+   * DRAFT — NOT RENDERED ANYWHERE. Do not wire this up until Adnan has
+   * approved the wording.
+   *
+   * These answers commit to pricing, timelines and ownership terms in his
+   * voice, and an FAQPage would republish them as his stated terms to Google
+   * and every AI assistant. They were drafted by Claude, not by him.
+   *
+   * To enable once approved: render the array on the home page AND emit it as
+   * FAQPage schema from the same array — never one without the other, since
+   * Google requires the markup to match visible page text. The `.faq__*`
+   * styles in site.css are still in place. See CONTEXT.md → AEO / GEO.
+   *
+   * Format rules that make an answer extractable: under ~55 words, and a real
+   * number in the first sentence.
+   */
+  faqs: [
+    {
+      q: "How much does a website cost?",
+      a: "A five-page business site runs \u20B915,000 to \u20B980,000 with a freelancer, against \u20B980,000 to \u20B93,00,000 at an agency for the same scope. The gap is process and redundancy, not code quality. I quote a fixed price per project after one call, not an hourly rate.",
+    },
+    {
+      q: "How long does it take to build?",
+      a: "Two to four weeks for a marketing site once the content exists. Writing the content is usually what takes longer than the build. Stores and custom integrations run six to ten weeks.",
+    },
+    {
+      q: "Do I own the website and the code?",
+      a: "Yes, all of it, from day one. The domain and hosting go in your name on your accounts, and the code is yours. If you ever want to work with someone else, you can leave without asking me for anything.",
+    },
+    {
+      q: "Do you do the design as well as the build?",
+      a: "Both. Portfolios often mix the two \u2014 a designer showing work someone else built, or a developer showing someone else's design. Everything in my work section is mine end to end, interface and backend.",
+    },
+    {
+      q: "Will the site actually rank on Google?",
+      a: "The technical side is handled at build: Core Web Vitals, structured data, crawlability, and now the markup that makes a site legible to AI search. Ranking also needs content and time \u2014 typically three to six months. Anyone promising page one in a month is selling you something.",
+    },
+    {
+      q: "Where are you based, and do you work remotely?",
+      a: "Delhi, India. Most of my work is remote, for clients across India and abroad. I reply to email within a day, and I will tell you straight if I am not the right fit for what you need.",
+    },
+  ] as { q: string; a: string }[],
 
   /** Verified credentials. Same list as adnankhan.tech. */
   certifications: [
