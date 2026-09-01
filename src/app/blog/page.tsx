@@ -55,12 +55,12 @@ export default function BlogIndex() {
       <div className="u-shell u-gutter">
         <PageBar />
 
-        <div className="blog__head">
-          <p className="u-mono">Journal</p>
-          <h1 className="blog__title">
+        <div className="blog__head" data-inview>
+          <p className="u-mono ds-fade-up">Journal</p>
+          <h1 className="blog__title ds-fade-up" style={{ ["--i" as string]: 1 }}>
             Straight answers about the things clients ask before they hire anyone.
           </h1>
-          <p className="blog__standfirst">
+          <p className="blog__standfirst ds-fade-up" style={{ ["--i" as string]: 2 }}>
             What a website really costs, why search stopped sending traffic, and
             what actually needs building now. No hedging, and no numbers I would
             not quote you in an email.
@@ -72,7 +72,12 @@ export default function BlogIndex() {
         ) : (
           <ol className="blog__list">
             {posts.map((post, i) => (
-              <li key={post.slug} className="blog__row">
+              <li
+                key={post.slug}
+                className="blog__row ds-fade-up"
+                data-inview
+                style={{ ["--i" as string]: i }}
+              >
                 <Link href={`/blog/${post.slug}`} className="blog__link">
                   <span className="blog__num">{String(i + 1).padStart(2, "0")}</span>
                   <span>
@@ -90,7 +95,7 @@ export default function BlogIndex() {
           </ol>
         )}
 
-        <footer className="blog__foot u-mono">
+        <footer className="blog__foot u-mono ds-fade-up" data-inview>
           <Link href="/">Back to the site</Link>
           <a href={`mailto:${site.email}`}>{site.email}</a>
         </footer>

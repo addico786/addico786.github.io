@@ -1,36 +1,23 @@
 import Link from "next/link";
+import MenuOverlay from "@/components/MenuOverlay";
+import Reveal from "@/components/Reveal";
 import { site } from "@/data/site";
 
 /**
- * The bar for every page that is not the home page.
+ * The bar on every page that is not home. Home has its own [data-menu], which
+ * hides until you are past the hero; this one is always there, because an
+ * inner page has no hero to hide behind.
  *
- * The home page's overlay nav lives in Motion.tsx and needs GSAP; these routes
- * deliberately ship no motion bundle, so the small-screen sheet is a checkbox
- * and sibling selectors. No JavaScript, and it still opens from the keyboard
- * because the control really is a checkbox behind its label.
+ * The burger and the panel it opens are the same ones home uses — same markup,
+ * same stylesheet, same links — so the menu does not change shape depending on
+ * which page you opened it from.
  *
- * The sheet is a SIBLING of <header>, never a child. `.bar` carries a
- * backdrop-filter, and a filtered element becomes the containing block for
- * `position: fixed` descendants — nested, the sheet's `inset: 0` resolved to
- * the 50px bar instead of the viewport and the panel rendered transparent.
+ * Reveal rides along here because every page that has this bar also wants the
+ * rise-in that Motion only ever gave the home page.
  */
 export default function PageBar() {
-  const links = (
-    <>
-      {site.pages.map((p) => (
-        <Link key={p.href} href={p.href}>
-          {p.label}
-        </Link>
-      ))}
-      <a href={`mailto:${site.email}`}>Say hello</a>
-    </>
-  );
-
   return (
-    <div className="barwrap">
-      {/* the state for everything below */}
-      <input type="checkbox" id="bar-menu" className="bar__toggle" />
-
+    <>
       <header className="bar">
         <Link href="/" className="bar__mark">
           {site.name}
@@ -45,19 +32,14 @@ export default function PageBar() {
           <a href={`mailto:${site.email}`}>Say hello</a>
         </nav>
 
-        <label className="bar__burger" htmlFor="bar-menu">
-          <span className="ds-sr-only">Menu</span>
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        </label>
+        <button data-burger type="button" aria-label="Menu">
+          <span />
+          <span />
+        </button>
       </header>
 
-      <div className="bar__sheet">
-        <nav className="bar__sheetlinks" aria-label="Pages">
-          {links}
-        </nav>
-        <span className="bar__sheetfoot u-mono">{site.email}</span>
-      </div>
-    </div>
+      <MenuOverlay />
+      <Reveal />
+    </>
   );
 }

@@ -49,10 +49,12 @@ export default function SchemaToolPage() {
       <div className="u-shell u-gutter">
         <PageBar />
 
-        <div className="blog__head">
-          <p className="u-mono">Free tool</p>
-          <h1 className="blog__title">Local business schema generator</h1>
-          <p className="blog__standfirst">
+        <div className="blog__head" data-inview>
+          <p className="u-mono ds-fade-up">Free tool</p>
+          <h1 className="blog__title ds-fade-up" style={{ ["--i" as string]: 1 }}>
+            Local business schema generator
+          </h1>
+          <p className="blog__standfirst ds-fade-up" style={{ ["--i" as string]: 2 }}>
             Structured data is how you state facts about your business in a form
             search engines and AI assistants read directly, instead of inferring
             them from your page layout. Fill this in, paste the result into your
@@ -63,7 +65,7 @@ export default function SchemaToolPage() {
 
         <SchemaBuilder />
 
-        <aside className="post__cta">
+        <aside className="post__cta ds-fade-up" data-inview>
           <p className="u-mono">Rather not do it yourself?</p>
           <p className="post__ctaline">
             Structured data, Core Web Vitals and the rest of the technical SEO
@@ -74,7 +76,7 @@ export default function SchemaToolPage() {
           </a>
         </aside>
 
-        <footer className="blog__foot u-mono">
+        <footer className="blog__foot u-mono ds-fade-up" data-inview>
           <Link href="/blog/invisible-to-ai-search">Why this matters</Link>
           <Link href="/">Back to the site</Link>
         </footer>

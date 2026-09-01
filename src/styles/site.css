@@ -167,6 +167,15 @@ img { display: block; max-width: 100%; }
 [data-overlay] {
   position: fixed;
   inset: 0;
+  /* dvh, not the inset:0 box. A phone resolves inset:0 against the LARGE
+     viewport, so with the toolbars showing the last row of .overlay__foot
+     sat under the browser chrome and read as a cut-off social links list.
+     overflow-y is the backstop for the case dvh cannot fix: a short landscape
+     viewport where the rows genuinely do not fit. */
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 90;
   background: var(--surface-canvas);
   display: flex;
@@ -298,7 +307,14 @@ img { display: block; max-width: 100%; }
   letter-spacing: var(--track-tight);
 }
 
-.overlay__foot { display: flex; flex-direction: column; border-top: 1px solid var(--border-subtle); }
+.overlay__foot {
+  display: flex;
+  flex-direction: column;
+  /* flex-shrink 0, or the rows compress instead of pushing the panel into
+     its scroll — which is the shape the cut-off links bug took. */
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border-subtle);
+}
 .overlay__foot a {
   padding: var(--space-4) clamp(var(--space-6), 3vw, var(--space-8));
   border-bottom: 1px solid var(--border-subtle);

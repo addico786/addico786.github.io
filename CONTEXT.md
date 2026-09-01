@@ -106,18 +106,42 @@ fixed. A post missing `title`, `description` or `date` **fails the build** —
 there is no sensible default for any of them, and the alternative is the word
 `undefined` on a live page.
 
-**Blog routes ship no motion bundle.** 562KB against the home page's 698KB,
-all of the difference being GSAP + Lenis + `Motion.tsx`. Nothing under
-`/blog` is a client component. What remains is the React/Next hydration
-baseline, which a static export cannot drop — do not describe these pages as
-"zero JS", because they are not. They *are* fully readable with JS disabled,
-which is the claim one of the posts makes, so it has to keep holding.
+**Blog routes ship no GSAP.** The difference against the home page is GSAP +
+Lenis + `Motion.tsx`. What they do carry is `MenuOverlay` and `Reveal`, both
+small, plus the React/Next hydration baseline a static export cannot drop —
+do not describe these pages as "zero JS", because they are not. They *are*
+fully readable with JS disabled, which is the claim one of the posts makes, so
+it has to keep holding.
 
-**Do not add the site nav to blog pages.** The overlay nav needs the motion
-bundle, and its links are `#about`-style anchors that go nowhere from
-`/blog/*`. The thin sticky `.blog__bar` exists for exactly this reason.
-`Motion.tsx` only intercepts `a[href^="#"]`, so the `/blog` entry in
-`site.nav` passes through untouched.
+**There is one mobile menu, not two.** `MenuOverlay.tsx` renders the
+`[data-overlay]` panel and owns its open/close on every page; `PageBar` and
+the home page both mount it. It used to exist twice — home's GSAP overlay and
+a CSS-checkbox sheet on the inner pages — which looked and behaved
+differently on the same site. Its `home` prop only picks between `#about` and
+`/#about`, because `Motion.tsx` only intercepts `a[href^="#"]`. Lenis lives in
+Motion, so the panel asks for the scroll pause with a `menu:open` /
+`menu:close` event rather than reaching for it.
+
+**`Reveal.tsx` is the reveal observer without the rest of the engine.** Same
+contract as Motion's copy — `data-inview` on a container, `ds-fade-up` on what
+rises, `--i` for order — so the journal and the tool animate like the rest of
+the site without the animation bundle. It drops Motion's `-10%` bottom
+rootMargin: that margin means anything in the last tenth of the page can never
+reach the threshold, which left the journal's own footer permanently invisible.
+
+**Hidden-until-revealed content needs an un-gate on every page.** `.js`
+hides `.ds-fade-up`, so if the bundle never arrives the page is blank text.
+The bootstrap timer in `layout.tsx` stamps `reveal-failed` on any page after
+4s, and `intro-failed` only where there is an opener to rescue — they are
+deliberately separate, because `intro-failed` tells Motion the intro already
+ran, and stamping it on `/blog` is what made the opener stop playing on the
+next trip home.
+
+**The opener only plays from the top.** `Motion.tsx` skips it when
+`scrollY > 2` or there is a hash. A reload halfway down restores the scroll
+position, and the intro used to play full-screen for three seconds before
+handing back a page nobody was looking at. Scroll restoration lands around
+hydration rather than before it, so the check runs again two frames in.
 
 **Tables get wrapped.** `withScrollableTables` in `posts.ts` puts every
 `<table>` in a `.prose__scroll` div. The prose column is 40rem and a
@@ -283,8 +307,10 @@ Two things that produced wrong answers here:
 
 ## Still open
 
-- **GIFs/screenshots** for PRD Decomposer, Blog Engine and NFC Cards. Drop in
-  `public/work/`, set `image:` on the project in `src/data/site.ts`.
+- **Screenshots** for InfraPilot, Agent Observability and Three-Server Deploy —
+  the three DevOps repos that replaced PRD Decomposer, Blog Engine and NFC
+  Cards. Drop in `public/work/`, set `image:` on the project in
+  `src/data/site.ts`.
 - **The FAQ** — drafted in `src/data/site.ts`, not rendered. Approve the
   wording and wire it up; see the AEO / GEO section.
 - **A second free tool.** The schema generator is live at `/tools/schema`. The

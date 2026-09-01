@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ImageSlot from "@/components/ImageSlot";
+import MenuOverlay from "@/components/MenuOverlay";
 import Motion from "@/components/Motion";
 import SplitText from "@/components/SplitText";
 import { site, projectNumber, marqueeText } from "@/data/site";
@@ -49,45 +50,7 @@ export default function Home() {
         </button>
       </div>
 
-      <div data-overlay>
-        <div className="overlay__head">
-          <span className="overlay__mark">{site.name}</span>
-          <button data-overlay-close type="button" aria-label="Close menu">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M4 4 L20 20 M20 4 L4 20" />
-            </svg>
-          </button>
-        </div>
-
-        <div className="overlay__gap" aria-hidden="true" />
-
-        <div className="overlay__links">
-          {site.nav.map((n, i) => (
-            <a key={n.href} href={n.href} data-overlay-link style={{ ["--i" as string]: i }}>
-              <span>{n.label}</span>
-            </a>
-          ))}
-        </div>
-
-        <div className="overlay__filler" aria-hidden="true" />
-
-        <div className="overlay__foot">
-          <a href={`mailto:${site.email}`} style={{ ["--i" as string]: 3 }}>
-            <span>{site.email}</span>
-          </a>
-          {site.socials.map((s, i) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ ["--i" as string]: 4 + i }}
-            >
-              <span>{s.label}</span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <MenuOverlay home />
 
       <div data-scroller>
         {/* The hero sticks within this stage, not the whole scroller — that is

@@ -52,7 +52,8 @@
 .ds-fade-up{transition-property:opacity,transform;transition-duration:var(--dur-base);transition-timing-function:var(--ease-out-cubic);transition-delay:calc(var(--delay-base) + var(--i, 0) * var(--stagger-line))}
 .js .ds-fade-up{opacity:0;transform:translate3d(0,var(--rise-fade),0)}
 .ds-fade-up.is-inview,
-.intro-failed .ds-fade-up{opacity:1;transform:translate3d(0,0,0)}
+.intro-failed .ds-fade-up,
+.reveal-failed .ds-fade-up{opacity:1;transform:translate3d(0,0,0)}
 
 /* Screen-reader-only text, for split containers that keep the real string. */
 .ds-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}

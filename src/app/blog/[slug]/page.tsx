@@ -76,11 +76,15 @@ export default async function PostPage({ params }: Props) {
         <PageBar />
 
         <article className="post">
-          <div className="post__head">
-            <p className="u-mono">{post.kicker}</p>
-            <h1 className="post__title">{post.title}</h1>
-            <p className="post__standfirst">{post.description}</p>
-            <div className="post__dateline u-mono">
+          <div className="post__head" data-inview>
+            <p className="u-mono ds-fade-up">{post.kicker}</p>
+            <h1 className="post__title ds-fade-up" style={{ ["--i" as string]: 1 }}>
+              {post.title}
+            </h1>
+            <p className="post__standfirst ds-fade-up" style={{ ["--i" as string]: 2 }}>
+              {post.description}
+            </p>
+            <div className="post__dateline u-mono ds-fade-up" style={{ ["--i" as string]: 3 }}>
               <time dateTime={post.date}>{formatDate(post.date)}</time>
               <span>{post.minutes} min read</span>
               <span>Adnan Khan, Delhi</span>
@@ -92,7 +96,7 @@ export default async function PostPage({ params }: Props) {
           <div className="prose" dangerouslySetInnerHTML={{ __html: post.html }} />
         </article>
 
-        <aside className="post__cta">
+        <aside className="post__cta ds-fade-up" data-inview>
           <p className="u-mono">Working on this yourself?</p>
           <p className="post__ctaline">
             Tell me what you are building and what is in the way. I reply within

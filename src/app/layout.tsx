@@ -165,6 +165,12 @@ export default function RootLayout({
             __html:
               "document.documentElement.classList.add('js');" +
               "window.__introFailsafe=setTimeout(function(){" +
+              /* Every page hides .ds-fade-up behind `js`, so every page
+                 needs the un-gate — the journal and the tool included,
+                 and they have no opener. `reveal-failed` is deliberately
+                 not `intro-failed`: it makes content visible without
+                 telling Motion the intro has already run. */
+              "document.documentElement.classList.add('reveal-failed');" +
               /* Only stamp the flag if this page actually has an intro to
                  rescue. The timer is per-document, but its only canceller is
                  Motion, which mounts on the home page alone — so on /blog or

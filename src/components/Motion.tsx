@@ -174,7 +174,17 @@ export default function Motion() {
        state instead. */
     const alreadyRevealed = document.documentElement.classList.contains("intro-failed");
 
-    if (reduced || alreadyRevealed) {
+    /* The opener is a full-screen panel over the TOP of the page, so it only
+       makes sense when the page starts there. Reloading halfway down restores
+       the scroll position, and the intro then played over the footer for three
+       seconds before handing back a page nobody was looking at. A hash target
+       is the same story. Scroll restoration lands around hydration rather than
+       before it, so this is read a frame late — the opener is on screen either
+       way, so the deferral costs nothing visually. */
+    const startsOffTop = () =>
+      window.scrollY > 2 || window.location.hash.length > 1;
+
+    if (reduced || alreadyRevealed || startsOffTop()) {
       if (opener) opener.style.display = "none";
       grid?.classList.add("is-drawn");
       root.classList.add("is-ruled");
@@ -184,6 +194,26 @@ export default function Motion() {
     } else if (opener) {
       lenis?.stop();
       document.body.style.overflow = "hidden";
+
+      /* Second look, one frame on, for the restore that had not landed yet. */
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => {
+          if (!startsOffTop()) return;
+          timers.forEach(clearTimeout);
+          opener.style.display = "none";
+          document.body.style.overflow = "";
+          lenis?.start();
+          grid?.classList.add("is-drawn");
+          root.classList.add("is-ruled");
+          heroSection?.classList.add("is-intro");
+          revealHero();
+        });
+      });
+      offs.push(() => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      });
 
       /* how long the word sits before it leaves, and the per-character exit */
       const HOLD = 1300;
@@ -449,36 +479,10 @@ export default function Motion() {
     });
 
     /* ---- overlay nav ---- */
-    const overlay = root.querySelector<HTMLElement>("[data-overlay]");
-    /* One class drives it. CSS owns both directions, so closing plays the
-       opening in reverse instead of being cut off mid-transition. */
-    const openOverlay = () => {
-      if (!overlay) return;
-      overlay.classList.add("is-open");
-      lenis?.stop();
-      document.body.style.overflow = "hidden";
-    };
-    const closeOverlay = () => {
-      if (!overlay) return;
-      overlay.classList.remove("is-open");
-      lenis?.start();
-      document.body.style.overflow = "";
-    };
-    const burger = root.querySelector<HTMLElement>("[data-burger]");
-    const closeBtn = root.querySelector<HTMLElement>("[data-overlay-close]");
-    if (burger) on(burger, "click", openOverlay);
-    if (closeBtn) on(closeBtn, "click", closeOverlay);
-    qa("[data-overlay-link]").forEach((a) =>
-      on(a, "click", () => timers.push(setTimeout(closeOverlay, 40)))
-    );
-    on(document, "keydown", (e) => {
-      if (
-        (e as KeyboardEvent).key === "Escape" &&
-        overlay?.classList.contains("is-open")
-      ) {
-        closeOverlay();
-      }
-    });
+    /* MenuOverlay owns the panel and its open/close on every page. Only the
+       Lenis pause belongs here, because Lenis only exists on this one. */
+    on(window, "menu:open", () => lenis?.stop());
+    on(window, "menu:close", () => lenis?.start());
 
     /* ---- in-page anchors ---- */
     qa<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
