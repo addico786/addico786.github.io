@@ -137,6 +137,20 @@ deliberately separate, because `intro-failed` tells Motion the intro already
 ran, and stamping it on `/blog` is what made the opener stop playing on the
 next trip home.
 
+**The page footer is only sticky when it fits.** `[data-footer]` uses
+`position: sticky; bottom: 0` so the body scrolls off it. A sticky element
+pinned with `bottom: 0` that is TALLER than the scrollport has its top pushed
+above the viewport with no scroll left to reach it — stacked on a phone the
+footer was ~880px against a 640px screen and the whole Contacts block, email
+and socials included, was unreachable at every scroll offset. Sticky is now
+guarded to `min-width: 1000px` and `min-height: 760px`; below that it is an
+ordinary block in flow. If the footer ever grows, re-check that guard.
+
+**The footer pairs its columns below 1000px.** Contacts and the sign-off span
+the full width, Credits and Elsewhere sit side by side, and `.foot__credits li`
+drops to one column there — its name/role sub-grid needs 194px and a half
+column on a 360px phone gives it 150.
+
 **The opener only plays from the top.** `Motion.tsx` skips it when
 `scrollY > 2` or there is a hash. A reload halfway down restores the scroll
 position, and the intro used to play full-screen for three seconds before
