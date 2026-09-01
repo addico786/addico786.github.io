@@ -94,7 +94,11 @@ export default function MenuOverlay({ home = false }: { home?: boolean }) {
       <div className="overlay__filler" aria-hidden="true" />
 
       <div className="overlay__foot">
-        <a href={`mailto:${site.email}`} style={{ ["--i" as string]: 5 }}>
+        {/* 3, not 6: the foot rows start drawing while the last nav link is
+            still coming in, which is the cadence the panel was built with.
+            Running them after it put the last social link almost a second and
+            a half after the tap, long enough to read as missing. */}
+        <a href={`mailto:${site.email}`} style={{ ["--i" as string]: 3 }}>
           <span>{site.email}</span>
         </a>
         {site.socials.map((s, i) => (
@@ -103,7 +107,7 @@ export default function MenuOverlay({ home = false }: { home?: boolean }) {
             href={s.href}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ ["--i" as string]: 6 + i }}
+            style={{ ["--i" as string]: 4 + i }}
           >
             <span>{s.label}</span>
           </a>
