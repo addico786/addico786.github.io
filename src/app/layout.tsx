@@ -5,6 +5,17 @@ import "./globals.css";
 const description =
   "Freelance web developer in Delhi, India. Websites that load fast and rank, technical SEO, automation, and cloud & DevOps. Available for freelance work.";
 
+/* Next replaces the parent's openGraph wholesale when a page defines its own,
+   so a page that sets openGraph without images ships none — which is what the
+   journal, the posts and the tool were doing, and a summary_large_image card
+   with no image renders as a blank box. Every page pulls this in. */
+export const OG_IMAGE = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: `${site.name} — ${site.tagline}`,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -31,7 +42,7 @@ export const metadata: Metadata = {
     title: `${site.name} — ${site.tagline}`,
     description,
     locale: "en_IN",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: `${site.name} — ${site.tagline}` }],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",

@@ -540,6 +540,14 @@ img { display: block; max-width: 100%; }
   padding: clamp(var(--space-7), 2.6vw, var(--space-9)) 0;
   transition: color var(--dur-fast) var(--ease-out-cubic);
 }
+/* `all: unset` resets outline to none, and this block sits later in the file
+   than the root :focus-visible rule at equal specificity — so the seven work
+   rows, the main thing on the page, were taking keyboard focus invisibly.
+   Inset offset because the row already spans the full column width. */
+[data-work-row]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
 [data-work-head]:hover [data-work-row],
 [data-work-head]:focus-within [data-work-row] { color: var(--interactive-primary); }
 [data-work-head]:hover [data-work-title],
@@ -609,13 +617,25 @@ img { display: block; max-width: 100%; }
 .contact__mail { font-size: clamp(20px, 3vw, var(--text-2xl)); font-weight: var(--weight-label); }
 
 /* --- footer ------------------------------------------------------------- */
+/* The body scrolls off the footer rather than pushing it down, which needs
+   position: sticky. That trick is only safe while the footer FITS: a sticky
+   element pinned with bottom:0 that is taller than the scrollport has its top
+   pushed above the viewport with no scroll left to reach it. Stacked into one
+   column on a phone the footer is ~880px against a 640px screen, so the whole
+   Contacts block — the email and every social link — sat 185px above the top
+   edge at maximum scroll, and the first thing you could actually see was
+   Credits. Hence the guard: sticky only in the four-column layout, and only
+   when the window is tall enough to hold it. Everywhere else it is an ordinary
+   block in flow, which can always be scrolled to. */
 [data-footer] {
-  position: sticky;
-  bottom: 0;
+  position: relative;
   z-index: 0;
   background: var(--surface-canvas);
   border-top: 1px solid var(--border-subtle);
-  padding: clamp(var(--space-10), 6vw, var(--space-11)) clamp(var(--space-8), 3vw, var(--space-10)) 0;
+  padding: clamp(var(--space-9), 6vw, var(--space-11)) clamp(var(--space-8), 3vw, var(--space-10)) 0;
+}
+@media (min-width: 1000px) and (min-height: 760px) {
+  [data-footer] { position: sticky; bottom: 0; }
 }
 /* ---------------------------------------------------------------------------
    Footer. Structure and values read off the source's own stylesheet, not the
@@ -626,12 +646,23 @@ img { display: block; max-width: 100%; }
    ------------------------------------------------------------------------- */
 .foot__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(var(--space-9), 5vw, var(--space-11));
+  /* Below the four-column layout the blocks pair up rather than stacking into
+     one long strip: all four in a row ran to ~880px on a 640px phone with the
+     right half of the screen sitting empty behind a column rule. Contacts and
+     the sign-off keep the full width — the email label does not fit a half
+     column at 360px — and Credits and Elsewhere sit side by side, which is
+     where the height comes back. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(var(--space-8), 5vw, var(--space-11));
   padding-bottom: clamp(var(--space-10), 6vw, var(--space-11));
 }
+.foot__item:first-child,
+.foot__item:last-child { grid-column: 1 / -1; }
 @media (min-width: 1000px) {
   .foot__grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-9); }
+  /* four real columns again, so nothing spans */
+  .foot__item:first-child,
+  .foot__item:last-child { grid-column: auto; }
 }
 
 /* .u-text-big: 1.875rem, dropping to 1.25rem under 1000px */
@@ -652,14 +683,20 @@ img { display: block; max-width: 100%; }
   letter-spacing: 0.02em;
 }
 
-.foot__list { list-style: none; padding-top: 1.25rem; display: flex; flex-direction: column; gap: var(--space-4); }
-.foot__list a { position: relative; display: inline-flex; align-items: baseline; gap: 0.4em; }
+/* WCAG 2.5.8 asks for 24px on a standalone link; these rendered 18px tall, and
+   they are the footer's contact and social links, so they are exactly the ones
+   worth hitting first time on a phone. The padding grows the hit area, the row
+   gap gives back precisely what the padding adds so the rhythm is unchanged,
+   and the underline offset is re-based on the padding so it still sits 3px
+   under the text rather than under the new box. */
+.foot__list { list-style: none; padding-top: 1.25rem; display: flex; flex-direction: column; gap: calc(var(--space-4) - 8px); }
+.foot__list a { position: relative; display: inline-flex; align-items: baseline; gap: 0.4em; padding-block: 4px; }
 .foot__list a i { font-style: normal; transition: transform var(--dur-fast) var(--ease-out-cubic); }
 .foot__list a:hover i { transform: translate(0.15em, -0.15em); }
 .foot__list a::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: -3px;
+  left: 0; right: 0; bottom: 1px;
   height: 1px;
   background: currentColor;
   transform: scaleX(0);
@@ -668,7 +705,13 @@ img { display: block; max-width: 100%; }
 }
 .foot__list a:hover::after { transform: scaleX(1); transform-origin: left; }
 
-.foot__credits li { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+/* Two-up only where there is room for it. In the paired mobile layout the
+   Credits column is half the screen and the name/role pair needed 194px in a
+   150px box, so the role drops under the name instead of overflowing. */
+.foot__credits li { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 1000px) {
+  .foot__credits li { grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+}
 .foot__credits span:last-child { color: var(--text-muted); }
 
 /* .c-footer_becots: word-split, each word rises from 100% */

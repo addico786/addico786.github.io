@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ID } from "@/app/layout";
+import { ID, OG_IMAGE } from "@/app/layout";
 import PageBar from "@/components/PageBar";
 import { site } from "@/data/site";
 import { allPosts, getPost, formatDate } from "@/lib/posts";
@@ -31,11 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.date,
       modifiedTime: post.updated ?? post.date,
       authors: [site.url],
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [OG_IMAGE.url],
     },
   };
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ID } from "@/app/layout";
+import { ID, OG_IMAGE } from "@/app/layout";
 import PageBar from "@/components/PageBar";
 import { site } from "@/data/site";
 import { allPosts, formatDate } from "@/lib/posts";
@@ -18,6 +18,13 @@ export const metadata: Metadata = {
     url: `${site.url}/blog`,
     title: `${title} — ${site.name}`,
     description,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${title} — ${site.name}`,
+    description,
+    images: [OG_IMAGE.url],
   },
 };
 

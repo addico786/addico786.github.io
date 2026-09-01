@@ -248,7 +248,8 @@
   padding-block: var(--space-9);
   border-top: 1px solid var(--border-subtle);
 }
-.blog__foot a { text-decoration: none; }
+/* 24px hit area, same reason as .foot__list in site.css */
+.blog__foot a { text-decoration: none; padding-block: 4px; }
 .blog__foot a:hover { color: var(--text-primary); }
 
 @media (max-width: 640px) {
