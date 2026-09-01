@@ -228,6 +228,15 @@ export const site = {
     },
   ],
 
+
+  /** Secondary nav, used by the footer and by the bar on the inner pages. */
+  pages: [
+    { label: "About", href: "/#about" },
+    { label: "Work", href: "/#work" },
+    { label: "Journal", href: "/blog" },
+    { label: "Schema generator", href: "/tools/schema", short: "Tools" },
+  ] as { label: string; href: string; short?: string }[],
+
   /** Contact section, aimed at someone deciding whether to hire. */
   contact: {
     lead: "Say hello",

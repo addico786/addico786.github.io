@@ -165,6 +165,14 @@ export default function RootLayout({
             __html:
               "document.documentElement.classList.add('js');" +
               "window.__introFailsafe=setTimeout(function(){" +
+              /* Only stamp the flag if this page actually has an intro to
+                 rescue. The timer is per-document, but its only canceller is
+                 Motion, which mounts on the home page alone — so on /blog or
+                 /tools it used to run to completion and leave `intro-failed`
+                 on <html> for the rest of the session. Navigating home from
+                 there then made Motion take its already-revealed branch and
+                 skip the opener entirely. */
+              "if(document.querySelector('[data-opener]'))" +
               "document.documentElement.classList.add('intro-failed')},4000)",
           }}
         />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ID } from "@/app/layout";
+import PageBar from "@/components/PageBar";
 import { site } from "@/data/site";
 import SchemaBuilder from "@/components/SchemaBuilder";
 
@@ -46,15 +47,7 @@ export default function SchemaToolPage() {
       />
 
       <div className="u-shell u-gutter">
-        <header className="blog__bar">
-          <Link href="/" className="blog__mark">
-            {site.name}
-          </Link>
-          <nav className="blog__barlinks u-mono">
-            <Link href="/blog">Journal</Link>
-            <a href={`mailto:${site.email}`}>Say hello</a>
-          </nav>
-        </header>
+        <PageBar />
 
         <div className="blog__head">
           <p className="u-mono">Free tool</p>

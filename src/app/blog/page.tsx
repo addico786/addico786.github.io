@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ID } from "@/app/layout";
+import PageBar from "@/components/PageBar";
 import { site } from "@/data/site";
 import { allPosts, formatDate } from "@/lib/posts";
 
@@ -52,15 +53,7 @@ export default function BlogIndex() {
       />
 
       <div className="u-shell u-gutter">
-        <header className="blog__bar">
-          <Link href="/" className="blog__mark">
-            {site.name}
-          </Link>
-          <nav className="blog__barlinks u-mono">
-            <Link href="/#work">Work</Link>
-            <a href={`mailto:${site.email}`}>Say hello</a>
-          </nav>
-        </header>
+        <PageBar />
 
         <div className="blog__head">
           <p className="u-mono">Journal</p>

@@ -598,8 +598,10 @@ img { display: block; max-width: 100%; }
 }
 /* ---------------------------------------------------------------------------
    Footer. Structure and values read off the source's own stylesheet, not the
-   video: four columns (Contacts | Credits | empty | sign-off), then a
-   secondary band for the colophon. Content is ours.
+   video: four columns, then a secondary band for the colophon. The source
+   left the third column empty; it now carries the Elsewhere links, which is
+   how the journal and the free tool are reachable from the home page at all.
+   Content is ours.
    ------------------------------------------------------------------------- */
 .foot__grid {
   display: grid;
@@ -607,10 +609,8 @@ img { display: block; max-width: 100%; }
   gap: clamp(var(--space-9), 5vw, var(--space-11));
   padding-bottom: clamp(var(--space-10), 6vw, var(--space-11));
 }
-.foot__spacer { display: none; }
 @media (min-width: 1000px) {
   .foot__grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-9); }
-  .foot__spacer { display: block; }
 }
 
 /* .u-text-big: 1.875rem, dropping to 1.25rem under 1000px */

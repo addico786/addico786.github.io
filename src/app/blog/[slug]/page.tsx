@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ID } from "@/app/layout";
+import PageBar from "@/components/PageBar";
 import { site } from "@/data/site";
 import { allPosts, getPost, formatDate } from "@/lib/posts";
 
@@ -72,15 +73,7 @@ export default async function PostPage({ params }: Props) {
       />
 
       <div className="u-shell u-gutter">
-        <header className="blog__bar">
-          <Link href="/" className="blog__mark">
-            {site.name}
-          </Link>
-          <nav className="blog__barlinks u-mono">
-            <Link href="/blog">Journal</Link>
-            <a href={`mailto:${site.email}`}>Say hello</a>
-          </nav>
-        </header>
+        <PageBar />
 
         <article className="post">
           <div className="post__head">

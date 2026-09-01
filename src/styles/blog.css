@@ -16,13 +16,23 @@
   min-height: 100vh;
 }
 
-/* --- masthead ----------------------------------------------------------- */
 /* Sticky and hairline-thin, so the reader keeps a way home without the full
    overlay nav — which cannot come along, since it needs the motion bundle. */
-.blog__bar {
+
+/* --- shared bar (PageBar.tsx) ------------------------------------------- *
+ * Sticky, hairline-thin. The small-screen sheet is driven by a checkbox and
+ * sibling selectors rather than script, because these routes carry no motion
+ * bundle. Keep the :checked rules and the .bar__toggle position together.
+ * ----------------------------------------------------------------------- */
+/* No filter/transform here: this element must not become the containing
+   block for the fixed sheet inside it. */
+.barwrap { position: relative; }
+.bar {
   position: sticky;
   top: 0;
-  z-index: 5;
+  /* Above .bar__sheet (30): the burger doubles as the close button, so the
+     bar has to stay hit-testable and visible while the sheet is open. */
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,17 +42,112 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-subtle);
 }
-.blog__mark {
+.bar__mark {
   font-family: var(--font-display);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-tight);
   font-size: var(--text-base);
   text-decoration: none;
   color: var(--text-primary);
+  position: relative;
+  z-index: 2;
 }
-.blog__barlinks { display: flex; gap: var(--space-6); }
-.blog__barlinks a { text-decoration: none; }
-.blog__barlinks a:hover { color: var(--text-primary); }
+.bar__links { display: flex; gap: var(--space-6); }
+.bar__links a { text-decoration: none; }
+.bar__links a:hover { color: var(--text-primary); }
+
+/* The checkbox is the state. Kept in the layout (not display:none) so it stays
+   focusable; it is simply invisible and sits under the burger it controls. */
+.bar__toggle {
+  position: absolute;
+  top: var(--space-5);
+  right: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  opacity: 0;
+  z-index: 3;
+  cursor: pointer;
+  display: none;
+}
+.bar__toggle:focus-visible ~ .bar .bar__burger {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+.bar__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 1.75rem;
+  height: 1.75rem;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+.bar__burger span[aria-hidden] {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: var(--text-primary);
+  transition: transform var(--dur-fast) var(--ease-out-cubic),
+              opacity var(--dur-fast) var(--ease-out-cubic);
+}
+/* nth-of-type, not first/last-of-type: the label's first span is the sr-only
+   "Menu" text that names the checkbox, so the two rules are spans 2 and 3. */
+.bar__toggle:checked ~ .bar .bar__burger span[aria-hidden]:nth-of-type(2) {
+  transform: translateY(3px) rotate(45deg);
+}
+.bar__toggle:checked ~ .bar .bar__burger span[aria-hidden]:nth-of-type(3) {
+  transform: translateY(-3px) rotate(-45deg);
+}
+
+.bar__sheet { display: none; }
+
+@media (max-width: 700px) {
+  .bar__links { display: none; }
+  .bar__toggle, .bar__burger { display: flex; }
+
+  .bar__sheet {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-9);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    padding: var(--space-11) clamp(var(--space-8), 3vw, var(--space-10));
+    background: var(--surface-canvas);
+    /* Closed state. Not display:none, so the panel can transition. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity var(--dur-fast) var(--ease-out-cubic),
+                transform var(--dur-fast) var(--ease-out-cubic),
+                visibility 0s linear var(--dur-fast);
+  }
+  .bar__toggle:checked ~ .bar__sheet {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .bar__sheetlinks { display: flex; flex-direction: column; gap: var(--space-7); }
+  .bar__sheetlinks a {
+    font-family: var(--font-display);
+    font-weight: var(--weight-display);
+    letter-spacing: var(--track-tight);
+    font-size: clamp(2rem, 9vw, 3rem);
+    line-height: var(--leading-tight);
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .bar__sheetfoot { position: absolute; left: clamp(var(--space-8), 3vw, var(--space-10)); bottom: var(--space-10); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar__sheet, .bar__burger span[aria-hidden] { transition: none; }
+}
 
 /* --- index -------------------------------------------------------------- */
 .blog__head { padding-top: clamp(var(--space-10), 8vw, var(--space-12)); }

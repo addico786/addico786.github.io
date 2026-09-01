@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ImageSlot from "@/components/ImageSlot";
 import Motion from "@/components/Motion";
 import SplitText from "@/components/SplitText";
@@ -401,8 +402,21 @@ export default function Home() {
               </ul>
             </section>
 
-            {/* the source leaves the third column empty; the sign-off sits in the fourth */}
-            <span className="foot__spacer" aria-hidden="true" />
+            {/* The source left this column empty. It now carries the pages that
+                are not reachable from the hero nav, which is how anyone finds
+                the journal or the free tool from the bottom of the page. */}
+            <section className="foot__item">
+              <h3 className="foot__head ds-fade-up" style={{ ["--i" as string]: 5 }}>Elsewhere</h3>
+              <ul className="foot__list">
+                {site.pages.map((pg, i) => (
+                  <li key={pg.href} className="ds-fade-up" style={{ ["--i" as string]: 6 + i }}>
+                    <Link className="u-label" href={pg.href}>
+                      {pg.label}<i aria-hidden="true">↗</i>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
             <section className="foot__item">
               <h3 className="foot__signoff" data-inview>
