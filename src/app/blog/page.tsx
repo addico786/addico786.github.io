@@ -6,23 +6,27 @@ import { site } from "@/data/site";
 import { allPosts, formatDate } from "@/lib/posts";
 
 const title = "Journal";
+/* The search title, separate from the on-page kicker. "Journal — Adnan" was
+   15 characters: it spent none of the title tag on what the journal is about,
+   and told someone scanning results nothing. */
+const searchTitle = "Journal — websites, SEO and AI search";
 const description =
   "Plain answers on what websites cost, why search has stopped sending clicks, and what to build now — from a freelance developer in Delhi.";
 
 export const metadata: Metadata = {
-  title,
+  title: searchTitle,
   description,
   alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",
     url: `${site.url}/blog`,
-    title: `${title} — ${site.name}`,
+    title: `${searchTitle} — ${site.name}`,
     description,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${title} — ${site.name}`,
+    title: `${searchTitle} — ${site.name}`,
     description,
     images: [OG_IMAGE.url],
   },

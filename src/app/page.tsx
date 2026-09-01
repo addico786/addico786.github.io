@@ -187,13 +187,20 @@ export default function Home() {
               Infrastructure and Google Cloud
             </p>
 
+            {/* The action is the resting label, not the hover one. ds-swap
+                needs :hover, which a phone never has — so on mobile the page's
+                primary call to action used to read "Available for work", a
+                status with no verb in it. The status still shows on hover, and
+                it is stated plainly in About and in llms.txt either way. The
+                accessible name follows the resting text, so this reads as an
+                action to a screen reader too. */}
             <a
               className="svc__cta ds-swap ds-split"
               href="#contact"
               data-swap
-              data-hover="Start a project"
+              data-hover="Available for work"
             >
-              Available for work
+              Start a project
             </a>
           </section>
 
