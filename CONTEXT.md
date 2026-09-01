@@ -307,10 +307,12 @@ Two things that produced wrong answers here:
 
 ## Still open
 
-- **Screenshots** for InfraPilot, Agent Observability and Three-Server Deploy —
-  the three DevOps repos that replaced PRD Decomposer, Blog Engine and NFC
-  Cards. Drop in `public/work/`, set `image:` on the project in
-  `src/data/site.ts`.
+- **Case studies.** Every project has a shot and a blurb; none has a write-up.
+  The three DevOps shots were taken by running the repos: InfraPilot's Vite
+  frontend, `agent.py` against a local Ollama with his SigNoz compose stack
+  behind it, and his playbooks against three throwaway Ubuntu containers over
+  the `community.docker` connection. All three are reproducible if a shot ever
+  needs retaking.
 - **The FAQ** — drafted in `src/data/site.ts`, not rendered. Approve the
   wording and wire it up; see the AEO / GEO section.
 - **A second free tool.** The schema generator is live at `/tools/schema`. The

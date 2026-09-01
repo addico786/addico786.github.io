@@ -196,7 +196,7 @@ export const site = {
       slot: "shot-infrapilot",
       placeholder: "InfraPilot dashboard",
       alt: "InfraPilot, a drift detection dashboard for Terraform and Kubernetes manifests",
-      image: undefined as string | undefined,
+      image: "/work/infrapilot.webp" as string | undefined,
       blurb:
         "Reads Terraform and Kubernetes manifests and scores how far the running infrastructure has drifted from them.",
     },
@@ -208,8 +208,8 @@ export const site = {
       linkLabel: "addico786/signoz_observability_project",
       slot: "shot-signoz",
       placeholder: "SigNoz trace waterfall",
-      alt: "A self-hosted SigNoz stack tracing a local AI agent through OpenTelemetry",
-      image: undefined as string | undefined,
+      alt: "A SigNoz trace waterfall of one agent request, with the tool call and the LLM call as child spans",
+      image: "/work/signoz.webp" as string | undefined,
       blurb:
         "A self-hosted SigNoz stack that traces a local AI agent end to end, so a slow call has a waterfall behind it.",
     },
@@ -221,8 +221,8 @@ export const site = {
       linkLabel: "addico786/2_tier_app_deployed_remotly",
       slot: "shot-ansible",
       placeholder: "Ansible playbook run",
-      alt: "A two-tier application deployed across three remote servers with Ansible playbooks",
-      image: undefined as string | undefined,
+      alt: "An ansible-playbook run installing Apache, PHP and Nginx across the app servers, both plays green",
+      image: "/work/ansible.webp" as string | undefined,
       blurb:
         "Frontend, backend and database stood up across three remote servers from Ansible playbooks — no manual SSH.",
     },
